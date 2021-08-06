@@ -32,13 +32,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>C:\Users\Alternative\Downloads\Hollow Knight\hollow_knight_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="RandomizerMod3.0">
-      <HintPath>C:\Users\Alternative\Downloads\Hollow Knight\hollow_knight_Data\Managed\Mods\RandomizerMod3.0.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\RandomizerMod3.0.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SereCore">
-      <HintPath>C:\Users\Alternative\Downloads\Hollow Knight\hollow_knight_Data\Managed\Mods\SereCore.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\SereCore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
