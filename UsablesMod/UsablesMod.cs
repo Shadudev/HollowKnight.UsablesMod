@@ -1,12 +1,12 @@
 ﻿using Modding;
-using System;
-using UsablesMod.Usables;
 
 namespace UsablesMod
 {
     public class UsablesMod : Mod, ITogglableMod
     {
-        public UsablesMod Instance { get; private set; }
+        public static UsablesMod Instance { get; private set; }
+
+        private UsabalesManager usabalesManager;
 
         public override void Initialize()
         {
@@ -17,6 +17,7 @@ namespace UsablesMod
             }
 
             Instance = this;
+            usabalesManager = new UsabalesManager();
 
             AddKpRockCheck();
             RandomizerMod.GiveItemActions.ExternItemHandlers.Add(TriggerUsable);
@@ -30,10 +31,10 @@ namespace UsablesMod
                 RandomizerMod.Randomization.PostRandomizer.CreateActions;
         }
 
-        private static bool TriggerUsable(RandomizerMod.GiveItemActions.GiveAction action,
+        private bool TriggerUsable(RandomizerMod.GiveItemActions.GiveAction action,
 			string item, string location, int geo)
         {
-			SampleUsable.Run();
+            usabalesManager.Run(item);
 
 			return false;
         }
