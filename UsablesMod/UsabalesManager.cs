@@ -16,6 +16,8 @@ namespace UsablesMod
         {
             switch (usableName)
             {
+                case "Rancid_Egg-Weaver's_Den":
+                    return new LifebloodUsable();
                 default:
                     return new SampleUsable();
             }
