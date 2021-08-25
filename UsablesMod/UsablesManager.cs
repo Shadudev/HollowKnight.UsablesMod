@@ -17,7 +17,7 @@ namespace UsablesMod
             switch (usableName)
             {
                 case "Rancid_Egg-Weaver's_Den":
-                    return new HealOrDmgUsable();
+                    return new HealUsable();
                 default:
                     return new SampleUsable();
             }
