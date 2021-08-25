@@ -14,6 +14,7 @@ namespace UsablesMod
         public UsablesManager() 
         {
             usablesExecuter = new UsablesExecuter();
+            CreateUsablesReqDefs();
         }
 
         internal void AddUsableItemsToSet(HashSet<string> items)
@@ -26,7 +27,7 @@ namespace UsablesMod
             for (int i = 0; i < amount; i++)
             {
                 IUsable usable = factory.GetRandomUsable();
-                string usableItemName = $"{usable.GetName()}_{i}";
+                string usableItemName = $"{usable.GetName()}_({i})";
 
                 SetUsableItemData(usableItemName, usable);
 
@@ -56,19 +57,32 @@ namespace UsablesMod
         {
             RandomizerMod.LanguageStringManager.SetString("UI", usableItemName, usable.GetDisplayName());
 
-            string shopDescKey = usableItemName + "_SHOP_DESC";
-            RandomizerMod.LanguageStringManager.SetString("UI", shopDescKey, usable.GetDescription());
-
             RandomizerMod.Randomization.LogicManager.EditItemDef(usableItemName,
-                new RandomizerMod.Randomization.ReqDef()
-                {
-                    action = RandomizerMod.GiveItemActions.GiveAction.None,
-                    pool = "Usables",
-                    type = RandomizerMod.Randomization.ItemType.Trinket,
-                    nameKey = usableItemName,
-                    shopDescKey = shopDescKey,
-                    shopSpriteKey = usable.GetItemSpriteKey()
-                });
+                RandomizerMod.Randomization.LogicManager.GetItemDef(
+                    usableItemName.Substring(0, usableItemName.LastIndexOf("_"))));
+        }
+
+        private static void CreateUsablesReqDefs()
+        {
+            foreach (string usableName in UsablesFactory.USABLE_NAMES)
+            {
+                UsablesFactory.TryCreateUsable(usableName, out IUsable usable);
+                RandomizerMod.LanguageStringManager.SetString("UI", usableName, usable.GetDisplayName());
+
+                string shopDescKey = usableName + "_SHOP_DESC";
+                RandomizerMod.LanguageStringManager.SetString("UI", shopDescKey, usable.GetDescription());
+
+                RandomizerMod.Randomization.LogicManager.EditItemDef(usableName,
+                    new RandomizerMod.Randomization.ReqDef()
+                    {
+                        action = RandomizerMod.GiveItemActions.GiveAction.None,
+                        pool = "Usables",
+                        type = RandomizerMod.Randomization.ItemType.Trinket,
+                        nameKey = usableName,
+                        shopDescKey = shopDescKey,
+                        shopSpriteKey = usable.GetItemSpriteKey()
+                    });
+            }
         }
 
         internal void Run(string itemName)
