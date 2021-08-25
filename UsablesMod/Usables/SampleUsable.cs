@@ -2,16 +2,11 @@
 
 namespace UsablesMod.Usables
 {
-    class SampleUsable : IUsable
+    class SampleUsable : IUsable, IRevertable
     {
         public void Run()
         {
             Log("Running SampleUsable");
-        }
-        
-        public bool IsRevertable()
-        {
-            return true;
         }
 
         public float GetDuration()
@@ -27,6 +22,18 @@ namespace UsablesMod.Usables
         public string GetName()
         {
             return "SampleUsable";
+        }
+        public string GetDisplayName()
+        {
+            return "Sample Usable";
+        }
+        public string GetDescription()
+        {
+            return "Shop description here.";
+        }
+        public string GetItemSpriteKey()
+        {
+            return "UI.Shop.Shitpost";
         }
     }
 }

@@ -6,7 +6,7 @@ namespace UsablesMod.Usables
     {
         public void Run()
         {
-            int amount = new Random(DateTime.Now.Ticks.GetHashCode()).Next(1, 3);
+            int amount = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(1, 3);
             if (amount == 1) 
             {
                 HeroController.instance.TakeGeo((int) (PlayerData.instance.geo * 0.6f));
@@ -17,23 +17,22 @@ namespace UsablesMod.Usables
             }
         }
 
-        public bool IsRevertable()
-        {
-            return false;
-        }
-
-        public float GetDuration()
-        {
-            return -1;
-        }
-
-        public void Revert()
-        {
-        }
-
         public string GetName()
         {
             return "GeoMultiplierUsable";
         }
+        public string GetDisplayName()
+        {
+            return "Geo Multiplier";
+        }
+        public string GetDescription()
+        {
+            return "It may not be safe, but it could be worth it...";
+        }
+        public string GetItemSpriteKey()
+        {
+            return "ShopIcons.Geo";
+        }
+
     }
 }

@@ -6,7 +6,7 @@ namespace UsablesMod
     {
         public static UsablesMod Instance { get; private set; }
 
-        private UsablesManager usabalesManager;
+        internal UsablesManager usablesManager;
 
         public override void Initialize()
         {
@@ -17,32 +17,26 @@ namespace UsablesMod
             }
 
             Instance = this;
-            usabalesManager = new UsablesManager();
+            usablesManager = new UsablesManager();
 
-            AddKpRockCheck();
+            RandomizerMod.Randomization.ItemManager.AddRandomizedItems += usablesManager.AddUsableItemsToSet;
             RandomizerMod.GiveItemActions.ExternItemHandlers.Add(TriggerUsable);
-        }
-
-        private static void AddKpRockCheck() {
-            RandomizerMod.Randomization.PostRandomizer.PostRandomizationActions -=
-                RandomizerMod.Randomization.PostRandomizer.CreateActions;
-            RandomizerMod.Randomization.PostRandomizer.PostRandomizationActions += ReplaceKPGeoRock;
-            RandomizerMod.Randomization.PostRandomizer.PostRandomizationActions +=
-                RandomizerMod.Randomization.PostRandomizer.CreateActions;
+            RandomizerMod.SaveSettings.PreAfterDeserialize += usablesManager.LoadMissingItems;
         }
 
         private bool TriggerUsable(RandomizerMod.GiveItemActions.GiveAction action,
 			string item, string location, int geo)
         {
-            usabalesManager.Run(item);
+            if (!usablesManager.IsAUsable(item)) return false;
 
-			return false;
-        }
+            usablesManager.Run(item);
 
-        private static void ReplaceKPGeoRock()
-        {
-            string kingsPassLeftGeoRockLocation = "Geo_Rock-King's_Pass_Left";
-            RandomizerMod.RandomizerMod.Instance.Settings.AddItemPlacement("Rancid_Egg-Weaver's_Den", kingsPassLeftGeoRockLocation);
+            RandomizerMod.RandoLogger.LogItemToTracker(item, location);
+            RandomizerMod.RandomizerMod.Instance.Settings.MarkItemFound(item);
+            RandomizerMod.RandomizerMod.Instance.Settings.MarkLocationFound(location);
+            RandomizerMod.RandoLogger.UpdateHelperLog();
+            
+            return true;
         }
 
         public override string GetVersion()
@@ -54,7 +48,9 @@ namespace UsablesMod
         public void Unload()
         {
 			Instance = null;
-			RandomizerMod.GiveItemActions.ExternItemHandlers.Remove(TriggerUsable);
-		}
+            RandomizerMod.Randomization.ItemManager.AddRandomizedItems -= usablesManager.AddUsableItemsToSet;
+            RandomizerMod.GiveItemActions.ExternItemHandlers.Remove(TriggerUsable);
+            RandomizerMod.SaveSettings.PreAfterDeserialize -= usablesManager.LoadMissingItems;
+        }
     }
 }

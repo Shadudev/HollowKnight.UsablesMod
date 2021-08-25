@@ -4,10 +4,8 @@ using System;
 
 namespace UsablesMod.Usables
 {
-    class HealUsable : IUsable
+    class HealUsable : IUsable, IRevertable
     {
-        
-
         public void Run()
         {
             
@@ -31,6 +29,18 @@ namespace UsablesMod.Usables
         public string GetName()
         {
             return "HealUsable";
+        }
+        public string GetDisplayName()
+        {
+            return "Health Supply";
+        }
+        public string GetDescription()
+        {
+            return "Supply has arrived! Wait, are you the supplier?";
+        }
+        public string GetItemSpriteKey()
+        {
+            return "ShopIcons.Focus";
         }
     }
 }
