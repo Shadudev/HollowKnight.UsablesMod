@@ -13,7 +13,7 @@ namespace UsablesMod.Usables
         public void Run()
         {
             bouncing = true;
-            GameManager.instance.StartCoroutine(Bouncing());
+            //GameManager.instance.StartCoroutine(Bouncing());
         }
 
         public bool IsRevertable()

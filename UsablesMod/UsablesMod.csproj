@@ -34,9 +34,9 @@
     <Reference Include="UnityEngine">
       <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-	 <Reference Include="UnityEngine.Physics2DModule">
-		 <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
-	 </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
     <Reference Include="PlayMaker">
       <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\PlayMaker.dll</HintPath>
     </Reference>
@@ -69,13 +69,14 @@
     <Compile Include="UsablesMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Usables\BounceUsable.cs" />
+    <Compile Include="Usables\RandomCharmsUsable.cs" />
     <Compile Include="Usables\GeoMultiplierUsable.cs" />
     <Compile Include="Usables\IUsable.cs" />
     <Compile Include="Usables\LifebloodUsable.cs" />
     <Compile Include="Usables\OvercharmedUsable.cs" />
     <Compile Include="Usables\NailDamageUsable.cs" />
     <Compile Include="Usables\MPCostUsable.cs" />
-    <Compile Include="Usables\HealOrDamageUsable.cs" />
+    <Compile Include="Usables\HealthUsable.cs" />
     <Compile Include="Usables\RespawnUsable.cs" />
     <Compile Include="Usables\SampleUsable.cs" />
     <Compile Include="Usables\ZoomUsable.cs" />

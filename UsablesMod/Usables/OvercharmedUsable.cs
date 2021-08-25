@@ -1,4 +1,5 @@
-﻿namespace UsablesMod.Usables
+﻿using System.Collections.Generic;
+namespace UsablesMod.Usables
 {
     class OvercharmedUsable : IUsable
     {

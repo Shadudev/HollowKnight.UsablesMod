@@ -4,7 +4,7 @@ using System.Collections;
 using Vasi;
 namespace UsablesMod.Usables
 {
-    class HealOrDamageUsable : MonoBehaviour, IUsable
+    class HealthUsable : MonoBehaviour, IUsable
     {
         bool healing;
         public void Run()
