@@ -6,7 +6,7 @@ namespace UsablesMod
 {
     internal class UsablesManager
     {
-        private static readonly int MIN_USABLES = 4, MAX_USABLES = 16;
+        private static readonly int MIN_USABLES = 7, MAX_USABLES = 16;
         private UsablesExecuter usablesExecuter;
 
         internal Dictionary<string, IUsable> usables;
