@@ -64,6 +64,8 @@
     <Compile Include="UsablesManager.cs" />
     <Compile Include="UsablesMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Usables\BounceUsable.cs" />
+    <Compile Include="Usables\RandomCharmsUsable.cs" />
     <Compile Include="Usables\GeoMultiplierUsable.cs" />
     <Compile Include="Usables\IRevertable.cs" />
     <Compile Include="Usables\IUsable.cs" />
@@ -71,7 +73,7 @@
     <Compile Include="Usables\OvercharmedUsable.cs" />
     <Compile Include="Usables\NailDamageUsable.cs" />
     <Compile Include="Usables\MPCostUsable.cs" />
-    <Compile Include="Usables\HealUsable.cs" />
+    <Compile Include="Usables\HealthUsable.cs" />
     <Compile Include="Usables\RespawnUsable.cs" />
     <Compile Include="Usables\SampleUsable.cs" />
     <Compile Include="Usables\ZoomUsable.cs" />

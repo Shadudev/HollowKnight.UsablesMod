@@ -1,12 +1,9 @@
-﻿using static UsablesMod.LogHelper;
-
-namespace UsablesMod.Usables
+﻿namespace UsablesMod.Usables
 {
     class SampleUsable : IUsable, IRevertable
     {
         public void Run()
         {
-            Log("Running SampleUsable");
         }
 
         public float GetDuration()
@@ -16,7 +13,6 @@ namespace UsablesMod.Usables
 
         public void Revert()
         {
-            Log("Reverting SampleUsable");
         }
 
         public string GetName()

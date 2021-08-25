@@ -5,7 +5,7 @@ namespace UsablesMod
 {
     class UsablesFactory
     {
-        private static readonly int USABLES_AMOUNT = 8;
+        private static readonly int USABLES_AMOUNT = 10;
 
         private Random random;
 
@@ -33,7 +33,7 @@ namespace UsablesMod
                 case 0:
                     return new GeoMultiplierUsable();
                 case 1:
-                    return new HealUsable();
+                    return new HealthUsable();
                 case 2:
                     return new LifebloodUsable();
                 case 3:
@@ -46,6 +46,10 @@ namespace UsablesMod
                     return new RespawnUsable();
                 case 7:
                     return new ZoomUsable();
+                case 8:
+                    return new BounceUsable();
+                case 9:
+                    return new RandomCharmsUsable();
                 default:
                     return new SampleUsable();
             }

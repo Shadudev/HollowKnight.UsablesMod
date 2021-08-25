@@ -6,7 +6,7 @@ namespace UsablesMod.Usables
     {
         public void Run()
         {
-            int amount = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(1, 3);
+            int amount = new Random(DateTime.Now.Ticks.GetHashCode()).Next(1, 3);
             if (amount == 1) 
             {
                 HeroController.instance.TakeGeo((int) (PlayerData.instance.geo * 0.6f));
