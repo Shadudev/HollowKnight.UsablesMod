@@ -7,7 +7,7 @@ namespace UsablesMod
     {
         private static readonly int USABLES_AMOUNT = 10;
 
-        private Random random;
+        private readonly Random random;
 
         internal static readonly string[] USABLE_NAMES = new string[USABLES_AMOUNT];
         static UsablesFactory()

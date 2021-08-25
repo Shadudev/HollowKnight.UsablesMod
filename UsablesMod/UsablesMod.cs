@@ -19,7 +19,7 @@ namespace UsablesMod
             Instance = this;
             usablesManager = new UsablesManager();
 
-            RandomizerMod.Randomization.ItemManager.AddRandomizedItems += usablesManager.AddUsableItemsToSet;
+            RandomizerMod.Randomization.ItemManager.AddItemsToRandomizedItemsSet += usablesManager.AddUsableItemsToSet;
             RandomizerMod.GiveItemActions.ExternItemHandlers.Add(TriggerUsable);
             RandomizerMod.SaveSettings.PreAfterDeserialize += usablesManager.LoadMissingItems;
         }
@@ -48,7 +48,7 @@ namespace UsablesMod
         public void Unload()
         {
 			Instance = null;
-            RandomizerMod.Randomization.ItemManager.AddRandomizedItems -= usablesManager.AddUsableItemsToSet;
+            RandomizerMod.Randomization.ItemManager.AddItemsToRandomizedItemsSet -= usablesManager.AddUsableItemsToSet;
             RandomizerMod.GiveItemActions.ExternItemHandlers.Remove(TriggerUsable);
             RandomizerMod.SaveSettings.PreAfterDeserialize -= usablesManager.LoadMissingItems;
         }

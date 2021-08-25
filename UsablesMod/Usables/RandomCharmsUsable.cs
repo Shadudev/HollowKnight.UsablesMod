@@ -3,7 +3,7 @@ namespace UsablesMod.Usables
 {
     class RandomCharmsUsable : IUsable
     { 
-        private List<int> ownedCharms = new List<int>();
+        private readonly List<int> ownedCharms = new List<int>();
 
         public void Run()
         {

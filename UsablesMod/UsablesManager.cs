@@ -7,7 +7,7 @@ namespace UsablesMod
     internal class UsablesManager
     {
         private static readonly int MIN_USABLES = 7, MAX_USABLES = 16;
-        private UsablesExecuter usablesExecuter;
+        private readonly UsablesExecuter usablesExecuter;
 
         internal Dictionary<string, IUsable> usables;
 
@@ -40,8 +40,7 @@ namespace UsablesMod
             usables = new Dictionary<string, IUsable>();
             foreach ((string item, string _) in settings.ItemPlacements)
             {
-                IUsable usable;
-                if (UsablesFactory.TryCreateUsable(item, out usable))
+                if (UsablesFactory.TryCreateUsable(item, out IUsable usable))
                 {
                     RegisterUsable(item, usable);
                 }
