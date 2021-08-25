@@ -14,7 +14,7 @@ namespace UsablesMod.Usables
             GameManager.instance.StartCoroutine(Bouncing());
         }
 
-            public bool IsRevertable()
+        public bool IsRevertable()
         {
             return true;
         }

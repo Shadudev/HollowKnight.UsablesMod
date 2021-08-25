@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 namespace UsablesMod.Usables
 {
-    class RandomCharmsUsable : IUsable, IRevertable
-    {
+    class RandomCharmsUsable : IUsable
+    { 
         private List<int> ownedCharms = new List<int>();
 
         public void Run()
@@ -31,20 +31,6 @@ namespace UsablesMod.Usables
             }
             HeroController.instance.CharmUpdate();
             GameManager.instance.RefreshOvercharm();
-        }
-
-        public bool IsRevertable()
-        {
-            return false;
-        }
-
-        public float GetDuration()
-        {
-            return 10f;
-        }
-
-        public void Revert()
-        {
         }
 
         public string GetName()

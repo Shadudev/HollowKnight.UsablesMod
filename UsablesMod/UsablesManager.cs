@@ -47,7 +47,6 @@ namespace UsablesMod
                 }
             }
         }
-
         internal void RegisterUsable(string usableItemName, IUsable usable)
         {
             SetUsableItemData(usableItemName, usable);
