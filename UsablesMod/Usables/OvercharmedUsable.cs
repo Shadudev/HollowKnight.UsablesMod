@@ -1,35 +1,37 @@
 ﻿namespace UsablesMod.Usables
 {
-    class SampleUsable : IUsable, IRevertable
+    class OvercharmedUsable : IUsable, IRevertable
     {
         public void Run()
         {
+            PlayerData.instance.overcharmed = true;
         }
 
         public float GetDuration()
         {
-            return 12f;
+            return 10f;
         }
 
         public void Revert()
         {
+            GameManager.instance.RefreshOvercharm();
         }
 
         public string GetName()
         {
-            return "SampleUsable";
+            return "OvercharmedUsable";
         }
         public string GetDisplayName()
         {
-            return "Sample Usable";
+            return "Overcharmed Time";
         }
         public string GetDescription()
         {
-            return "Shop description here.";
+            return "Cursing your notches has proven to improve Flukemarm RNG.";
         }
         public string GetItemSpriteKey()
         {
-            return "UI.Shop.Shitpost";
+            return "ShopIcons.CharmNotch";
         }
     }
 }
