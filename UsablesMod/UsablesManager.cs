@@ -4,7 +4,7 @@ using UsablesMod.Usables;
 
 namespace UsablesMod
 {
-    class UsabalesManager : MonoBehaviour
+    class UsablesManager : MonoBehaviour
     {
         public void Run(string usableName)
         {
@@ -17,7 +17,7 @@ namespace UsablesMod
             switch (usableName)
             {
                 case "Rancid_Egg-Weaver's_Den":
-                    return new GeoMultiplierUsable();
+                    return new OvercharmedUsable();
                 default:
                     return new SampleUsable();
             }
