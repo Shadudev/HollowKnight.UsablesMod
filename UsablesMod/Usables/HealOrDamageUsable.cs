@@ -1,5 +1,4 @@
-﻿using static UsablesMod.LogHelper;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 //using ModCommon;
 using Vasi;

@@ -4,16 +4,24 @@ using System.Collections;
 
 namespace UsablesMod.Usables
 {
-    class SampleUsable : IUsable
+    class BounceUsable : IUsable
     {
         private bool bouncing = false;
+
         public void Run()
         {
             bouncing = true;
-            HeroController.instance.DEFAULT_GRAVITY = 20f;
             GameManager.instance.StartCoroutine(Bouncing());
+            On.HeroController.Awake += mymethod;
+
         }
-        
+
+        private void mymethod(On.HeroController.orig_Awake orig, HeroController self)
+        {
+            self.DEFAULT_GRAVITY = 30f;
+            orig(self);
+        }
+
         public bool IsRevertable()
         {
             return true;
@@ -26,6 +34,7 @@ namespace UsablesMod.Usables
 
         public void Revert()
         {
+            //GameManager.instance.LoadMrMushromScene();
             bouncing = false;
         }
 
@@ -36,7 +45,7 @@ namespace UsablesMod.Usables
 
         private IEnumerator Bouncing()
         {
-            while(bouncing)
+            while (bouncing)
             {
                 if (HeroController.instance.CheckTouchingGround())
                 {
@@ -48,3 +57,4 @@ namespace UsablesMod.Usables
         }
     }
 }
+
