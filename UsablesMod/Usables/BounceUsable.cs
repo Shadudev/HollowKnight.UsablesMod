@@ -1,25 +1,19 @@
 ﻿using static UsablesMod.LogHelper;
 using UnityEngine;
 using System.Collections;
+using System;
 
 namespace UsablesMod.Usables
 {
     class BounceUsable : IUsable
     {
+        System.Random rnd = new System.Random();
         private bool bouncing = false;
-
+        
         public void Run()
         {
             bouncing = true;
             GameManager.instance.StartCoroutine(Bouncing());
-            On.HeroController.Awake += mymethod;
-
-        }
-
-        private void mymethod(On.HeroController.orig_Awake orig, HeroController self)
-        {
-            self.DEFAULT_GRAVITY = 30f;
-            orig(self);
         }
 
         public bool IsRevertable()
@@ -29,18 +23,18 @@ namespace UsablesMod.Usables
 
         public float GetDuration()
         {
-            return 12f;
+            return 30f;
         }
 
         public void Revert()
         {
-            //GameManager.instance.LoadMrMushromScene();
             bouncing = false;
+
         }
 
         public string GetName()
         {
-            return "SampleUsable";
+            return "BounceUsable";
         }
 
         private IEnumerator Bouncing()
@@ -51,7 +45,7 @@ namespace UsablesMod.Usables
                 {
                     HeroController.instance.ShroomBounce();
                 }
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(rnd.Next(5));
             }
             yield return null;
         }

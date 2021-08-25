@@ -34,6 +34,9 @@
     <Reference Include="UnityEngine">
       <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+	 <Reference Include="UnityEngine.Physics2DModule">
+		 <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
+	 </Reference>
     <Reference Include="PlayMaker">
       <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\PlayMaker.dll</HintPath>
     </Reference>
