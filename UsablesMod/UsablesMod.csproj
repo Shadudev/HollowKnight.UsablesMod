@@ -31,24 +31,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PlayMaker">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\PlayMaker.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="PlayMaker">
+      <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="RandomizerMod3.0">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\RandomizerMod3.0.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\Mods\RandomizerMod3.0.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SereCore">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\SereCore.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\Mods\SereCore.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>D:\SteamLibrary\steamapps\common\Hollow Knight - Copy\hollow_knight_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,7 +66,12 @@
     <Compile Include="Usables\IUsable.cs" />
     <Compile Include="Usables\LifebloodUsable.cs" />
     <Compile Include="Usables\OvercharmedUsable.cs" />
+    <Compile Include="Usables\NailDamageUsable.cs" />
+    <Compile Include="Usables\MPCostUsable.cs" />
+    <Compile Include="Usables\HealUsable.cs" />
+    <Compile Include="Usables\RespawnUsable.cs" />
     <Compile Include="Usables\SampleUsable.cs" />
+    <Compile Include="Usables\ZoomUsable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
