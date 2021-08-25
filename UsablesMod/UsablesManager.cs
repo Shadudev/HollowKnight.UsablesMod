@@ -4,7 +4,7 @@ using UsablesMod.Usables;
 
 namespace UsablesMod
 {
-    class UsabalesManager : MonoBehaviour
+    class UsablesManager : MonoBehaviour
     {
         public void Run(string usableName)
         {

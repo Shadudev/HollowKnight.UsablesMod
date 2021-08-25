@@ -6,7 +6,7 @@ namespace UsablesMod
     {
         public static UsablesMod Instance { get; private set; }
 
-        private UsabalesManager usabalesManager;
+        private UsablesManager usabalesManager;
 
         public override void Initialize()
         {
@@ -17,7 +17,7 @@ namespace UsablesMod
             }
 
             Instance = this;
-            usabalesManager = new UsabalesManager();
+            usabalesManager = new UsablesManager();
 
             AddKpRockCheck();
             RandomizerMod.GiveItemActions.ExternItemHandlers.Add(TriggerUsable);
