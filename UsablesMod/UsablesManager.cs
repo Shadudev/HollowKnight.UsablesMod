@@ -72,16 +72,22 @@ namespace UsablesMod
                 string shopDescKey = usableName + "_SHOP_DESC";
                 RandomizerMod.LanguageStringManager.SetString("UI", shopDescKey, usable.GetDescription());
 
-                RandomizerMod.Randomization.LogicManager.EditItemDef(usableName,
-                    new RandomizerMod.Randomization.ReqDef()
-                    {
-                        action = RandomizerMod.GiveItemActions.GiveAction.None,
-                        pool = "Usables",
-                        type = RandomizerMod.Randomization.ItemType.Trinket,
-                        nameKey = usableName,
-                        shopDescKey = shopDescKey,
-                        shopSpriteKey = usable.GetItemSpriteKey()
-                    });
+
+                RandomizerMod.Randomization.ReqDef usableDef = new RandomizerMod.Randomization.ReqDef()
+                {
+                    action = RandomizerMod.GiveItemActions.GiveAction.None,
+                    pool = "Usables",
+                    type = RandomizerMod.Randomization.ItemType.Trinket,
+                    nameKey = usableName,
+                    shopDescKey = shopDescKey,
+                    shopSpriteKey = usable.GetItemSpriteKey(),
+                };
+                if (usable is GeoMultiplierUsable)
+                {
+                    usableDef.geo = 1;
+                }
+
+                RandomizerMod.Randomization.LogicManager.EditItemDef(usableName, usableDef);
             }
         }
 
