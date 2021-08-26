@@ -11,7 +11,7 @@
 
         public float GetDuration()
         {
-            return 40f;
+            return 90f;
         }
 
         public void Revert()

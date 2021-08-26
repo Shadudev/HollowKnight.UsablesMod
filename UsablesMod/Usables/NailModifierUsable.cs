@@ -22,7 +22,11 @@ namespace UsablesMod.Usables
             PlayerData.instance.nailDamage += damageBuffAmount;
             PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
-            nailScaleMultiplier = random.Next(5, 15) / 10f;
+            if (random.Next(2) == 0)
+                nailScaleMultiplier = random.Next(15, 25) / 10f;
+            else
+                nailScaleMultiplier = random.Next(2, 6) / 10f;
+
             On.NailSlash.StartSlash += ChangeNailScale;
         }
 
@@ -35,7 +39,7 @@ namespace UsablesMod.Usables
 
         public float GetDuration()
         {
-            return 20;
+            return 90;
         }
 
         public void Revert()

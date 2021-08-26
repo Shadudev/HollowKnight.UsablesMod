@@ -8,7 +8,11 @@ namespace UsablesMod.Usables
 
         public ZoomUsable(int randomSeed) 
         {
-            multiplier = new Random(randomSeed).Next(7, 20) / 10f;
+            Random random = new Random(randomSeed);
+            if (random.Next(2) == 1)
+                multiplier = random.Next(6, 8) / 10f;
+            else
+                multiplier = random.Next(13, 20) / 10f;
         }
 
         public void Run()
@@ -18,7 +22,7 @@ namespace UsablesMod.Usables
 
         public float GetDuration()
         {
-            return 30;
+            return 120;
         }
 
         public void Revert()
@@ -32,7 +36,7 @@ namespace UsablesMod.Usables
         }
         public string GetDisplayName()
         {
-            return "Zoomed In Camera";
+            return "Zoomed Camera";
         }
         public string GetDescription()
         {

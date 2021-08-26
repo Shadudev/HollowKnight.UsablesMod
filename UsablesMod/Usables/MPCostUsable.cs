@@ -19,7 +19,7 @@ namespace UsablesMod.Usables
 
         public float GetDuration()
         {
-            return 30;
+            return 120;
         }
 
         public void Revert()
