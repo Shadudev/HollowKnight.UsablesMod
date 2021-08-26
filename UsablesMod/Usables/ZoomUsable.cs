@@ -4,9 +4,16 @@ namespace UsablesMod.Usables
 {
     class ZoomUsable : IUsable, IRevertable
     {
+        private float multiplier;
+
+        public ZoomUsable(int randomSeed) 
+        {
+            multiplier = new Random(randomSeed).Next(7, 20) / 10f;
+        }
+
         public void Run()
         {
-            GameCameras.instance.tk2dCam.ZoomFactor = GameCameras.instance.tk2dCam.ZoomFactor * 1.4f;
+            GameCameras.instance.tk2dCam.ZoomFactor *= multiplier;
         }
 
         public float GetDuration()
@@ -16,12 +23,12 @@ namespace UsablesMod.Usables
 
         public void Revert()
         {
-            GameCameras.instance.tk2dCam.ZoomFactor = GameCameras.instance.tk2dCam.ZoomFactor * 5f / 7f;
+            GameCameras.instance.tk2dCam.ZoomFactor /= multiplier;
         }
 
         public string GetName()
         {
-            return "ZoomUsable";
+            return "Zoom_Usable";
         }
         public string GetDisplayName()
         {

@@ -2,6 +2,8 @@
 {
     class OvercharmedUsable : IUsable, IRevertable
     {
+        public OvercharmedUsable() {}
+
         public void Run()
         {
             PlayerData.instance.overcharmed = true;
@@ -9,7 +11,7 @@
 
         public float GetDuration()
         {
-            return 10f;
+            return 40f;
         }
 
         public void Revert()
@@ -19,7 +21,7 @@
 
         public string GetName()
         {
-            return "OvercharmedUsable";
+            return "Overcharmed_Usable";
         }
         public string GetDisplayName()
         {

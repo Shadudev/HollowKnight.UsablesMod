@@ -26,7 +26,7 @@ namespace UsablesMod
 
             for (int i = 0; i < amount; i++)
             {
-                IUsable usable = factory.GetRandomUsable();
+                IUsable usable = factory.GetRandomUsable(randomSeed: RandomizerMod.RandomizerMod.Instance.Settings.Seed + i);
                 string usableItemName = $"{usable.GetName()}_({i})";
 
                 SetUsableItemData(usableItemName, usable);

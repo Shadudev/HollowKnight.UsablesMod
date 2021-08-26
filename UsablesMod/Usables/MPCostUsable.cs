@@ -4,11 +4,16 @@ namespace UsablesMod.Usables
 {
     class MPCostUsable : IUsable
     {
+        private readonly int multiplier;
+
+        public MPCostUsable(int randomSeed)
+        {
+            multiplier = new Random(randomSeed).Next(0, 2) * 2;
+        }
+
         public void Run()
         {
             PlayMakerFSM SpellControl = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
-
-            int multiplier = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(0, 2) * 2;
             SpellControl.FsmVariables.FindFsmInt("MP Cost").Value *= multiplier;
         }
 
@@ -25,7 +30,7 @@ namespace UsablesMod.Usables
 
         public string GetName()
         {
-            return "MPCost";
+            return "MP_Cost_Usable";
         }
         public string GetDisplayName()
         {
