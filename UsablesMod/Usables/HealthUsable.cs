@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
 namespace UsablesMod.Usables
 {
     class HealthUsable : MonoBehaviour, IUsable, IRevertable
     {
-        private System.Random random;
+        private readonly System.Random random;
         private bool running;
+
+        public HealthUsable(int randomSeed)
+        {
+            random = new System.Random(randomSeed);
+        }
 
         public void Run()
         {
-            random = new System.Random(DateTime.Now.Ticks.GetHashCode());
             running = true;
 
             int amount = random.Next(1, 3);
@@ -60,7 +63,7 @@ namespace UsablesMod.Usables
 
         public string GetName()
         {
-            return "HealUsable";
+            return "Health_Usable";
         }
 
         public string GetDisplayName()

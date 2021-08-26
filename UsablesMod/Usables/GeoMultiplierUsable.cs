@@ -4,10 +4,16 @@ namespace UsablesMod.Usables
 {
     class GeoMultiplierUsable : IUsable
     {
+        private readonly bool isGoodMultiplier;
+
+        public GeoMultiplierUsable(int randomSeed)
+        {
+            isGoodMultiplier = new Random(randomSeed).Next(2) == 0;
+        }
+
         public void Run()
         {
-            int amount = new Random(DateTime.Now.Ticks.GetHashCode()).Next(1, 3);
-            if (amount == 1) 
+            if (isGoodMultiplier)
             {
                 HeroController.instance.TakeGeo((int) (PlayerData.instance.geo * 0.6f));
             } 
@@ -19,7 +25,7 @@ namespace UsablesMod.Usables
 
         public string GetName()
         {
-            return "GeoMultiplierUsable";
+            return "Geo_Multiplier_Usable";
         }
         public string GetDisplayName()
         {
