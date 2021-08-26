@@ -1,44 +1,89 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 using UsablesMod.Usables;
 
 namespace UsablesMod
 {
-    class UsablesManager : MonoBehaviour
+    internal class UsablesManager
     {
-        public void Run(string usableName)
+        private static readonly int MIN_USABLES = 7, MAX_USABLES = 16;
+        private readonly UsablesExecuter usablesExecuter;
+
+        internal Dictionary<string, IUsable> usables;
+
+        public UsablesManager() 
         {
-            IUsable usable = GetUsable(usableName);
-            RunUsable(usable);
+            usablesExecuter = new UsablesExecuter();
         }
 
-        private IUsable GetUsable(string usableName)
+        internal void AddUsableItemsToSet(HashSet<string> items)
         {
-            switch (usableName)
+            usables = new Dictionary<string, IUsable>();
+
+            int amount = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(MIN_USABLES, MAX_USABLES + 1);
+            UsablesFactory factory = new UsablesFactory();
+
+            for (int i = 0; i < amount; i++)
             {
-                case "Rancid_Egg-Weaver's_Den":
-                    return new RandomCharmsUsable();
-                default:
-                    return new SampleUsable();
+                IUsable usable = factory.GetRandomUsable();
+                string usableItemName = $"{usable.GetName()}_{i}";
+
+                SetUsableItemData(usableItemName, usable);
+
+                usables.Add(usableItemName, usable);
+                items.Add(usableItemName);
             }
         }
 
-        private void RunUsable(IUsable usable)
+        internal void LoadMissingItems(RandomizerMod.SaveSettings settings)
         {
-            GameManager.instance.StartCoroutine(RunUsableRoutine(usable));
+            usables = new Dictionary<string, IUsable>();
+            foreach ((string item, string _) in settings.ItemPlacements)
+            {
+                if (UsablesFactory.TryCreateUsable(item, out IUsable usable))
+                {
+                    RegisterUsable(item, usable);
+                }
+            }
+        }
+        internal void RegisterUsable(string usableItemName, IUsable usable)
+        {
+            SetUsableItemData(usableItemName, usable);
+            usables.Add(usableItemName, usable);
         }
 
-        private IEnumerator RunUsableRoutine(IUsable usable)
+        internal static void SetUsableItemData(string usableItemName, IUsable usable)
         {
-            LogHelper.Log($"Running {usable.GetName()} routine");
-            usable.Run();
-            if (usable.IsRevertable())
-            {
-                float duration = usable.GetDuration();
-                LogHelper.Log($"Reverting {usable.GetName()} in {duration}"); 
-                yield return new WaitForSeconds(duration);
-                usable.Revert();
-            }
+            RandomizerMod.LanguageStringManager.SetString("UI", usableItemName, usable.GetDisplayName());
+
+            string shopDescKey = usableItemName + "_SHOP_DESC";
+            RandomizerMod.LanguageStringManager.SetString("UI", shopDescKey, usable.GetDescription());
+
+            RandomizerMod.Randomization.LogicManager.EditItemDef(usableItemName,
+                new RandomizerMod.Randomization.ReqDef()
+                {
+                    action = RandomizerMod.GiveItemActions.GiveAction.None,
+                    pool = "Usables",
+                    type = RandomizerMod.Randomization.ItemType.Trinket,
+                    nameKey = usableItemName,
+                    shopDescKey = shopDescKey,
+                    shopSpriteKey = usable.GetItemSpriteKey()
+                });
+        }
+
+        internal void Run(string itemName)
+        {
+            IUsable usable = usables[itemName];
+            usablesExecuter.RunUsable(usable);
+        }
+
+        internal bool IsAUsable(string item)
+        {
+            foreach (string usableName in UsablesFactory.USABLE_NAMES)
+                if (item.StartsWith(usableName))
+                    return true;
+
+            return false;
         }
     }
 }

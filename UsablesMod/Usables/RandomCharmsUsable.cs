@@ -2,8 +2,9 @@
 namespace UsablesMod.Usables
 {
     class RandomCharmsUsable : IUsable
-    {
-        List<int> ownedCharms = new List<int>();
+    { 
+        private readonly List<int> ownedCharms = new List<int>();
+
         public void Run()
         {
             System.Random rnd = new System.Random();
@@ -32,23 +33,24 @@ namespace UsablesMod.Usables
             GameManager.instance.RefreshOvercharm();
         }
 
-        public bool IsRevertable()
-        {
-            return false;
-        }
-
-        public float GetDuration()
-        {
-            return 10f;
-        }
-
-        public void Revert()
-        {
-        }
-
         public string GetName()
         {
             return "RandomCharmsUsable";
+        }
+
+        public string GetDisplayName()
+        {
+            return "New Charms Build";
+        }
+
+        public string GetDescription()
+        {
+            return "Not to be rude, but your current charms build is not that good. Lemme show you how it's done.";
+        }
+
+        public string GetItemSpriteKey()
+        {
+            return "Charms.2";
         }
     }
 }

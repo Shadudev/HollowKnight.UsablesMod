@@ -2,16 +2,11 @@ using System;
 
 namespace UsablesMod.Usables
 {
-    class ZoomUsable : IUsable
+    class ZoomUsable : IUsable, IRevertable
     {
         public void Run()
         {
             GameCameras.instance.tk2dCam.ZoomFactor = GameCameras.instance.tk2dCam.ZoomFactor * 1.4f;
-        }
-
-        public bool IsRevertable()
-        {
-            return true;
         }
 
         public float GetDuration()
@@ -27,6 +22,18 @@ namespace UsablesMod.Usables
         public string GetName()
         {
             return "ZoomUsable";
+        }
+        public string GetDisplayName()
+        {
+            return "Zoomed In Camera";
+        }
+        public string GetDescription()
+        {
+            return "Enhance. Enhance. Still can't see anything, ENHANCE!";
+        }
+        public string GetItemSpriteKey()
+        {
+            return "ShopIcons.Focus";
         }
     }
 }

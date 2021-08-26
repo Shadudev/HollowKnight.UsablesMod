@@ -1,22 +1,9 @@
-﻿using static UsablesMod.LogHelper;
-using UnityEngine;
-using System.Collections;
-
-namespace UsablesMod.Usables
+﻿namespace UsablesMod.Usables
 {
-    class SampleUsable : IUsable
+    class SampleUsable : IUsable, IRevertable
     {
-        private bool bouncing = false;
         public void Run()
         {
-            bouncing = true;
-            HeroController.instance.DEFAULT_GRAVITY = 20f;
-            GameManager.instance.StartCoroutine(Bouncing());
-        }
-        
-        public bool IsRevertable()
-        {
-            return true;
         }
 
         public float GetDuration()
@@ -26,25 +13,23 @@ namespace UsablesMod.Usables
 
         public void Revert()
         {
-            bouncing = false;
         }
 
         public string GetName()
         {
             return "SampleUsable";
         }
-
-        private IEnumerator Bouncing()
+        public string GetDisplayName()
         {
-            while(bouncing)
-            {
-                if (HeroController.instance.CheckTouchingGround())
-                {
-                    HeroController.instance.ShroomBounce();
-                }
-                yield return new WaitForSeconds(0.05f);
-            }
-            yield return null;
+            return "Sample Usable";
+        }
+        public string GetDescription()
+        {
+            return "Shop description here.";
+        }
+        public string GetItemSpriteKey()
+        {
+            return "UI.Shop.Shitpost";
         }
     }
 }

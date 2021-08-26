@@ -1,18 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
-//using ModCommon;
-using Vasi;
+using System;
+
 namespace UsablesMod.Usables
 {
-    class HealthUsable : MonoBehaviour, IUsable
+    class HealthUsable : MonoBehaviour, IUsable, IRevertable
     {
-        bool healing;
+        private System.Random random;
+        private bool running;
+
         public void Run()
         {
-            healing = true;
-            HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.top, 1, 0);
-            GameManager.instance.StartCoroutine(regeneration());
-            PlayMakerFSM[] fsmList = UnityEngine.Object.FindObjectsOfType<PlayMakerFSM>();
+            random = new System.Random(DateTime.Now.Ticks.GetHashCode());
+            running = true;
+
+            int amount = random.Next(1, 3);
+            if (amount == 1)
+            {
+                GameManager.instance.StartCoroutine(Regeneration());
+            }
+            else
+            {
+                GameManager.instance.StartCoroutine(Poison());
+            }
         }
 
         public bool IsRevertable()
@@ -27,7 +37,25 @@ namespace UsablesMod.Usables
 
         public void Revert()
         {
-            healing = false;
+            running = false;
+        }
+        
+        private IEnumerator Regeneration()
+        {
+            while (running)
+            {
+                HeroController.instance.AddHealth(1);
+                yield return new WaitForSeconds(random.Next(2, 12));
+            }
+        }
+
+        private IEnumerator Poison()
+        {
+            while (running)
+            {
+                HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.top, 1, 0);
+                yield return new WaitForSeconds(random.Next(3, 12));
+            }
         }
 
         public string GetName()
@@ -35,13 +63,19 @@ namespace UsablesMod.Usables
             return "HealUsable";
         }
 
-        private IEnumerator regeneration()
+        public string GetDisplayName()
         {
-            while (healing)
-            {
-                HeroController.instance.AddHealth(1);
-                yield return new WaitForSeconds(2f);
-            }
+            return "Health Supply";
+        }
+
+        public string GetDescription()
+        {
+            return "Health supply has arrived! Wait, are you the supplier?";
+        }
+
+        public string GetItemSpriteKey()
+        {
+            return "ShopIcons.Focus";
         }
     }
 }

@@ -17,23 +17,22 @@ namespace UsablesMod.Usables
             }
         }
 
-        public bool IsRevertable()
-        {
-            return false;
-        }
-
-        public float GetDuration()
-        {
-            return -1;
-        }
-
-        public void Revert()
-        {
-        }
-
         public string GetName()
         {
             return "GeoMultiplierUsable";
         }
+        public string GetDisplayName()
+        {
+            return "Geo Multiplier";
+        }
+        public string GetDescription()
+        {
+            return "It may not be safe, but it could be worth it...";
+        }
+        public string GetItemSpriteKey()
+        {
+            return "ShopIcons.Geo";
+        }
+
     }
 }

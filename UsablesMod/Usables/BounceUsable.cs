@@ -1,19 +1,17 @@
-﻿using static UsablesMod.LogHelper;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System;
 
 namespace UsablesMod.Usables
 {
-    class BounceUsable : IUsable
+    class BounceUsable : IUsable, IRevertable
     {
-        System.Random rnd = new System.Random();
         private bool bouncing = false;
         
         public void Run()
         {
             bouncing = true;
-            //GameManager.instance.StartCoroutine(Bouncing());
+            GameManager.instance.StartCoroutine(Bouncing());
         }
 
         public bool IsRevertable()
@@ -29,16 +27,11 @@ namespace UsablesMod.Usables
         public void Revert()
         {
             bouncing = false;
-
-        }
-
-        public string GetName()
-        {
-            return "BounceUsable";
         }
 
         private IEnumerator Bouncing()
         {
+            System.Random rnd = new System.Random(DateTime.Now.Ticks.GetHashCode());
             while (bouncing)
             {
                 if (HeroController.instance.CheckTouchingGround())
@@ -48,6 +41,23 @@ namespace UsablesMod.Usables
                 yield return new WaitForSeconds(rnd.Next(5));
             }
             yield return null;
+        }
+
+        public string GetName()
+        {
+            return "BounceUsable";
+        }
+        public string GetDisplayName()
+        {
+            return "Spring Shoes";
+        }
+        public string GetDescription()
+        {
+            return "I swear, your jump key is broken.";
+        }
+        public string GetItemSpriteKey()
+        {
+            return "ShopIcons.Wings";
         }
     }
 }

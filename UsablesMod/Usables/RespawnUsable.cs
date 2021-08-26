@@ -9,23 +9,21 @@ namespace UsablesMod.Usables
             GameManager.instance.HazardRespawn();
         }
 
-        public bool IsRevertable()
-        {
-            return false;
-        }
-
-        public float GetDuration()
-        {
-            return -1;
-        }
-
-        public void Revert()
-        {
-        }
-
         public string GetName()
         {
             return "RespawnUsable";
+        }
+        public string GetDisplayName()
+        {
+            return "Hazard Respawn";
+        }
+        public string GetDescription()
+        {
+            return "How did I get here?";
+        }
+        public string GetItemSpriteKey()
+        {
+            return "ShopIcons.CityKey";
         }
     }
 }
