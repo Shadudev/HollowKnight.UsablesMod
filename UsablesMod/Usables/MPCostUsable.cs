@@ -1,22 +1,44 @@
 ﻿using HutongGames.PlayMaker;
 using System;
+using System.Collections;
+using UnityEngine;
 
 namespace UsablesMod.Usables
 {
     class MPCostUsable : IUsable, IRevertable
     {
+        bool running = false;
         private readonly int multiplier;
         private FsmInt mpCost;
 
         public MPCostUsable(int randomSeed)
         {
-            multiplier = new Random(randomSeed).Next(0, 2) * 2;
+            multiplier = new System.Random(randomSeed).Next(0, 2) * 2;
         }
 
         public void Run()
         {
+            running = true;
             mpCost = HeroController.instance.gameObject.LocateMyFSM("Spell Control").FsmVariables.FindFsmInt("MP Cost");
             mpCost.Value *= multiplier;
+            GameManager.instance.StartCoroutine(WaitingForBench());
+        }
+
+        private IEnumerator WaitingForBench()
+        {
+            while (running)
+            {
+                if (mpCost.Value == 24 || mpCost.Value == 33)
+                {
+                    while (!PlayerData.instance.atBench)
+                    {
+                        yield return new WaitForSeconds(2f);
+                    }
+                    mpCost.Value *= multiplier;
+                    yield return new WaitForSeconds(2f);
+                }
+                yield return new WaitForSeconds(2f);
+            }
         }
 
         public float GetDuration()
@@ -26,6 +48,7 @@ namespace UsablesMod.Usables
 
         public void Revert()
         {
+            running = false;
             mpCost.Value = PlayerData.instance.GetBool("equippedCharm_33") ? 24 : 33;
         }
 
