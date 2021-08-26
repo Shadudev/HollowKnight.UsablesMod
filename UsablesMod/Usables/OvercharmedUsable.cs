@@ -6,6 +6,11 @@
 
         public void Run()
         {
+            SetOvercharm();
+        }
+
+        private static void SetOvercharm()
+        {
             PlayerData.instance.overcharmed = true;
         }
 

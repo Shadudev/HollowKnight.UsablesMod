@@ -21,6 +21,7 @@ namespace UsablesMod
                 float duration = revertable.GetDuration();
                 LogHelper.Log($"Reverting {usable.GetName()} in {duration}");
                 yield return new WaitForSeconds(duration);
+                LogHelper.Log($"Reverting {usable.GetName()}");
                 revertable.Revert();
             }
         }
