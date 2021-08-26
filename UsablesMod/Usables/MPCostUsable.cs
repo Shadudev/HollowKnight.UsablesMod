@@ -1,10 +1,12 @@
-﻿using System;
+﻿using HutongGames.PlayMaker;
+using System;
 
 namespace UsablesMod.Usables
 {
-    class MPCostUsable : IUsable
+    class MPCostUsable : IUsable, IRevertable
     {
         private readonly int multiplier;
+        private FsmInt mpCost;
 
         public MPCostUsable(int randomSeed)
         {
@@ -13,8 +15,8 @@ namespace UsablesMod.Usables
 
         public void Run()
         {
-            PlayMakerFSM SpellControl = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
-            SpellControl.FsmVariables.FindFsmInt("MP Cost").Value *= multiplier;
+            mpCost = HeroController.instance.gameObject.LocateMyFSM("Spell Control").FsmVariables.FindFsmInt("MP Cost");
+            mpCost.Value *= multiplier;
         }
 
         public float GetDuration()
@@ -24,8 +26,7 @@ namespace UsablesMod.Usables
 
         public void Revert()
         {
-            PlayMakerFSM SpellControl = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
-            SpellControl.FsmVariables.FindFsmInt("MP Cost").Value = PlayerData.instance.GetBool("equippedCharm_33") ? 24 : 33;
+            mpCost.Value = PlayerData.instance.GetBool("equippedCharm_33") ? 24 : 33;
         }
 
         public string GetName()

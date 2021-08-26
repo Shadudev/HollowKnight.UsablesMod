@@ -11,23 +11,23 @@ namespace UsablesMod.Usables
         public NailModifierUsable(int randomSeed)
         {
             random = new Random(randomSeed);
+            damageBuffAmount = 0;
         }
 
         public void Run()
         {
+            if (random.Next(2) == 0)
+                nailScaleMultiplier = random.Next(15, 25) / 10f;
+            else
+                nailScaleMultiplier = random.Next(2, 6) / 10f;
+            On.NailSlash.StartSlash += ChangeNailScale;
+
             int damageBuffMultiplier = random.Next(1, 3) == 1 ? 1 : -1;
             damageBuffAmount = random.Next(1, PlayerData.instance.nailDamage) * damageBuffMultiplier;
             if (damageBuffMultiplier < 0 && PlayerData.instance.nailDamage == 1) return;
 
             PlayerData.instance.nailDamage += damageBuffAmount;
             PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
-
-            if (random.Next(2) == 0)
-                nailScaleMultiplier = random.Next(15, 25) / 10f;
-            else
-                nailScaleMultiplier = random.Next(2, 6) / 10f;
-
-            On.NailSlash.StartSlash += ChangeNailScale;
         }
 
         private void ChangeNailScale(On.NailSlash.orig_StartSlash orig, NailSlash self)
@@ -44,10 +44,10 @@ namespace UsablesMod.Usables
 
         public void Revert()
         {
+            On.NailSlash.StartSlash -= ChangeNailScale;
+
             PlayerData.instance.nailDamage -= damageBuffAmount;
             PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
-
-            On.NailSlash.StartSlash -= ChangeNailScale;
         }
 
         public string GetName()

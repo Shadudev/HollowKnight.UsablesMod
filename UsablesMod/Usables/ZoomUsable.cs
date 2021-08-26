@@ -4,11 +4,12 @@ namespace UsablesMod.Usables
 {
     class ZoomUsable : IUsable, IRevertable
     {
-        private float multiplier;
+        private readonly Random random;
+        private readonly float multiplier;
 
         public ZoomUsable(int randomSeed) 
         {
-            Random random = new Random(randomSeed);
+            random = new Random(randomSeed);
             if (random.Next(2) == 1)
                 multiplier = random.Next(6, 8) / 10f;
             else
@@ -22,7 +23,7 @@ namespace UsablesMod.Usables
 
         public float GetDuration()
         {
-            return 120;
+            return random.Next(120, 240);
         }
 
         public void Revert()
