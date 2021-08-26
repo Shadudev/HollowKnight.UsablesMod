@@ -56,7 +56,8 @@ namespace UsablesMod.Usables
         {
             while (running)
             {
-                HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.top, 1, 0);
+                GlobalEnums.CollisionSide ranHit = (GlobalEnums.CollisionSide)random.Next(5);
+                HeroController.instance.TakeDamage(HeroController.instance.gameObject, ranHit, 1, 0);
                 yield return new WaitForSeconds(random.Next(3, 12));
             }
         }
