@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
 namespace UsablesMod.Usables
 {
     class BounceUsable : IUsable, IRevertable
     {
+        private readonly System.Random random;
         private bool bouncing = false;
-        
+
+        public BounceUsable(int randomSeed)
+        {
+            random = new System.Random(randomSeed);
+        }
+
         public void Run()
         {
             bouncing = true;
@@ -21,7 +26,7 @@ namespace UsablesMod.Usables
 
         public float GetDuration()
         {
-            return 30f;
+            return 45f;
         }
 
         public void Revert()
@@ -31,21 +36,20 @@ namespace UsablesMod.Usables
 
         private IEnumerator Bouncing()
         {
-            System.Random rnd = new System.Random(DateTime.Now.Ticks.GetHashCode());
             while (bouncing)
             {
                 if (HeroController.instance.CheckTouchingGround())
                 {
                     HeroController.instance.ShroomBounce();
                 }
-                yield return new WaitForSeconds(rnd.Next(5));
+                yield return new WaitForSeconds(random.Next(5));
             }
             yield return null;
         }
 
         public string GetName()
         {
-            return "BounceUsable";
+            return "Bounce_Usable";
         }
         public string GetDisplayName()
         {
