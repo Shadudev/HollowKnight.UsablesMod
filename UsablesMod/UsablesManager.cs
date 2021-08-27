@@ -1,7 +1,8 @@
 ﻿using Modding;
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UsablesMod.Usables;
+using UnityEngine;
 
 namespace UsablesMod
 {
@@ -22,6 +23,7 @@ namespace UsablesMod
             usablesSlots = new UsablesSlots();
             usablesSlots.Hook();
             CreateUsablesReqDefs();
+            GameManager.instance.StartCoroutine(refreshInputs());
         }
 
         internal void AddUsableItemsToSet(HashSet<string> items)
@@ -29,7 +31,7 @@ namespace UsablesMod
             usables = new Dictionary<string, IUsable>();
             factory = new UsablesFactory();
 
-            int amount = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(MIN_USABLES, MAX_USABLES + 1);
+            int amount = new System.Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(MIN_USABLES, MAX_USABLES + 1);
 
             for (int i = 0; i < amount; i++)
             {
@@ -160,11 +162,25 @@ namespace UsablesMod
             }
         }
 
+        private IEnumerator refreshInputs()
+        {
+            if (InputHandler.Instance.inputActions.up.IsPressed && InputHandler.Instance.inputActions.quickMap.IsPressed)
+            {
+                Run(usablesSlots.GetString(0));
+            }
+            if (InputHandler.Instance.inputActions.down.IsPressed && InputHandler.Instance.inputActions.quickMap.IsPressed)
+            {
+                Run(usablesSlots.GetString(1));
+            }
+            yield return new WaitForSeconds(0.1f);
+            GameManager.instance.StartCoroutine(refreshInputs());
+        }
+
         internal void AddToSlots(string itemName)
         {
             if (usablesSlots.IsFullyOccupied())
             {
-                int n = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed +
+                int n = new System.Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed +
                     100 + NameFormatter.GetIdFromString(itemName)).Next(2);
                 Run(usablesSlots.Pop(n == 0));
             }
@@ -176,6 +192,11 @@ namespace UsablesMod
         internal void Run(string itemName)
         {
             IUsable usable = usables[itemName];
+            if (usable is IRevertable)
+            {
+                IRevertable revertable = usable as IRevertable;
+                GameManager.instance.StartCoroutine(usablesSlots.updatingDuration(revertable.GetDuration()));
+            }
             usablesExecuter.RunUsable(usable);
         }
 

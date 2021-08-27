@@ -75,6 +75,26 @@ namespace UsablesMod
             return usableName;
         }
 
+        public string GetString(int index)
+        {
+            return usablesNames[index];
+        }
+
+        internal IEnumerator updatingDuration(float duration)
+        {
+            Color usablesColour = usablesIcons[0].gameObject.GetComponent<SpriteRenderer>().color;
+            while (usablesColour.a != 0f)
+            {
+                usablesColour.a -= 0.1f;
+                yield return new WaitForSeconds(duration/10);
+            }
+            Object.Destroy(usablesIcons[0]);
+            usablesIcons[0] = null;
+
+            string usableName = usablesNames[0];
+            usablesNames[0] = null;
+        }
+
         public bool IsFullyOccupied()
         {
             return usablesIcons[0] != null && usablesIcons[1] != null;
