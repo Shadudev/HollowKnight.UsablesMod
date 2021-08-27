@@ -33,7 +33,7 @@ namespace UsablesMod.Usables
             for (int i = 0; i < equippedCharmsCount; i++)
             {
                 int charmIndex = random.Next(ownedCharms.Count);
-                PlayerData.instance.SetBool("equippedCharm_" + charmIndex, true);
+                PlayerData.instance.SetBool("equippedCharm_" + ownedCharms[charmIndex], true);
                 GameManager.instance.EquipCharm(ownedCharms[charmIndex]);
                 ownedCharms.RemoveAt(charmIndex);
             }
