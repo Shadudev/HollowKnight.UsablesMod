@@ -130,7 +130,7 @@ namespace UsablesMod
         {
             foreach (string usableName in UsablesFactory.USABLE_NAMES)
             {
-                UsablesFactory.TryCreateUsable(usableName, out IUsable usable);
+                UsablesFactory.TryCreateUsable(usableName + "_(0)", out IUsable usable);
                 RandomizerMod.LanguageStringManager.SetString("UI", usableName, usable.GetDisplayName());
 
                 string shopDescKey = usableName + "_SHOP_DESC";
