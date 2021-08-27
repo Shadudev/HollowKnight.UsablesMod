@@ -29,7 +29,7 @@ namespace UsablesMod
         {
             if (!usablesManager.IsAUsable(item)) return false;
 
-            usablesManager.Run(item);
+            usablesManager.AddToSlots(item);
 
             RandomizerMod.RandoLogger.LogItemToTracker(item, location);
             RandomizerMod.RandomizerMod.Instance.Settings.MarkItemFound(item);
@@ -51,6 +51,7 @@ namespace UsablesMod
             RandomizerMod.Randomization.ItemManager.AddItemsToRandomizedItemsSet -= usablesManager.AddUsableItemsToSet;
             RandomizerMod.GiveItemActions.ExternItemHandlers.Remove(TriggerUsable);
             RandomizerMod.SaveSettings.PreAfterDeserialize -= usablesManager.LoadMissingItems;
+            usablesManager = null;
         }
     }
 }
