@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using UsablesMod.Usables;
 
 namespace UsablesMod
@@ -58,7 +57,7 @@ namespace UsablesMod
 
         internal static bool TryCreateUsable(string descriptor, out IUsable usable)
         {
-            int usableId = GetIdFromString(descriptor);
+            int usableId = NameFormatter.GetIdFromString(descriptor);
             if (usableId != -1)
             {
                 for (int i = 0; i < USABLES_AMOUNT; i++)
@@ -74,17 +73,6 @@ namespace UsablesMod
 
             usable = null;
             return false;
-        }
-
-        private static int GetIdFromString(string descriptor)
-        {
-            Match match = Regex.Match(descriptor, @"_\((\d+)\)$");
-            if (match.Success)
-            {
-                return int.Parse(match.Groups[1].Value);
-            }
-
-            return -1;
         }
     }
 }
