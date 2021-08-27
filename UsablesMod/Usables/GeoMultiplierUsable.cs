@@ -6,20 +6,23 @@ namespace UsablesMod.Usables
     {
         private readonly bool isGoodMultiplier;
 
+        Random random;
+
         public GeoMultiplierUsable(int randomSeed)
         {
-            isGoodMultiplier = new Random(randomSeed).Next(2) == 0;
+            random = new Random(randomSeed);
+            isGoodMultiplier = random.Next(2) == 0;
         }
 
         public void Run()
         {
             if (isGoodMultiplier)
             {
-                HeroController.instance.TakeGeo((int) (PlayerData.instance.geo * 0.6f));
+                HeroController.instance.TakeGeo((int) (PlayerData.instance.geo * random.Next(1, 5) / 10));
             } 
             else
             {
-                HeroController.instance.AddGeo((int) (PlayerData.instance.geo * 0.6f)); ;
+                HeroController.instance.AddGeo((int) (PlayerData.instance.geo * random.Next(6, 10) / 10)); 
             }
         }
 
