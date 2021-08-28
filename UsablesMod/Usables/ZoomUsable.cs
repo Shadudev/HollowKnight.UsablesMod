@@ -4,10 +4,12 @@ namespace UsablesMod.Usables
 {
     class ZoomUsable : IUsable, IRevertable
     {
-        private static readonly string[] POSSIBLE_NAMES_IN = { "Enhanced Vision" };
+        private static readonly string[] POSSIBLE_NAMES_IN = { "Enhanced Vision", 
+            "I didn't like 4K anyway", "Look at the details on your skin!", "Look me in the eyes", 
+            "20-20 Vision"};
         private static readonly string[] POSSIBLE_NAMES_OUT = { "Where's the Knight?", 
             "I can't see anything", "What's over there?", "I can see my house from here!", 
-            "Enhanced Vision" };
+            "Smallow Knight Time!" };
 
         private readonly Random random;
         private readonly float multiplier;
@@ -29,7 +31,7 @@ namespace UsablesMod.Usables
         public void Run()
         {
             GameCameras.instance.tk2dCam.ZoomFactor *= multiplier;
-            string[] possible_names = multiplier > 1 ? POSSIBLE_NAMES_OUT : POSSIBLE_NAMES_OUT;
+            string[] possible_names = multiplier > 1 ? POSSIBLE_NAMES_IN : POSSIBLE_NAMES_OUT;
             displayName = possible_names[random.Next(possible_names.Length)];
         }
 
