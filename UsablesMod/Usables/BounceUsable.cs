@@ -49,7 +49,7 @@ namespace UsablesMod.Usables
                 {
                     HeroController.instance.ShroomBounce();
                 }
-                yield return new WaitForSeconds(random.Next(5));
+                yield return new WaitForSeconds(random.Next(3));
             }
             yield return null;
         }

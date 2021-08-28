@@ -128,12 +128,6 @@ namespace UsablesMod
 
         internal IEnumerator ShowDuration(GameObject usableIcon, IRevertable revertable)
         {
-            //GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
-            //    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero,
-            //    new Vector2(0.01f, 0.1f), new Vector2(0.01f, 0.1f)));
-            //CanvasUtil.CreateImagePanel(basePanel, RandomizerMod.RandomizerMod.GetSprite(revertable.),
-            //    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0f),
-            //        new Vector2(0f, 0f)));
             Vector2 newPos = new Vector2(0.11f, 0.76f);
             usableIcon.GetComponent<RectTransform>().anchorMin = newPos;
             usableIcon.GetComponent<RectTransform>().anchorMax = newPos;

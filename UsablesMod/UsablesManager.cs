@@ -152,7 +152,6 @@ namespace UsablesMod
                 {
                     usableDef.geo = 1;
                 }
-
                 RandomizerMod.Randomization.LogicManager.EditItemDef(usableName, usableDef);
             }
         }
@@ -168,7 +167,6 @@ namespace UsablesMod
             foreach (string usableName in UsablesFactory.USABLE_NAMES)
                 if (item.StartsWith(usableName))
                     return true;
-
             return false;
         }
 
