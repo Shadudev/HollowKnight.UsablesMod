@@ -6,6 +6,7 @@ namespace UsablesMod.Usables
     {
         private readonly Random random;
         private readonly float multiplier;
+        private readonly float duration;
 
         public ZoomUsable(int randomSeed) 
         {
@@ -14,6 +15,7 @@ namespace UsablesMod.Usables
                 multiplier = random.Next(6, 8) / 10f;
             else
                 multiplier = random.Next(13, 20) / 10f;
+            duration = random.Next(120, 240);
         }
 
         public void Run()
@@ -23,7 +25,7 @@ namespace UsablesMod.Usables
 
         public float GetDuration()
         {
-            return random.Next(120, 240);
+            return duration;
         }
 
         public void Revert()

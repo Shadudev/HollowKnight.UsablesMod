@@ -1,6 +1,7 @@
 ﻿using Modding;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UsablesMod.Usables;
 
 namespace UsablesMod
@@ -10,15 +11,21 @@ namespace UsablesMod
     {
         private int invPanels;
 
-        private readonly string[] usablesNames;
+        private readonly IUsable[] usables;
         private readonly GameObject[] usablesIcons;
         private GameObject canvas;
+
+        private readonly UsablesExecuter usablesExecuter;
+
+        private Coroutine usablesTriggerRoutine;
 
         public UsablesSlots()
         {
             invPanels = 0;
-            usablesNames = new string[2];
+            usables = new IUsable[2];
             usablesIcons = new GameObject[2];
+
+            usablesExecuter = new UsablesExecuter();
         }
 
         private void Create()
@@ -42,57 +49,105 @@ namespace UsablesMod
             canvas = null;
         }
 
-        public void Add(string itemName, string spriteKey)
+        public void Add(string itemName, IUsable usable)
         {
             if (canvas == null)
             {
                 Create();
             }
 
-            int slotIndex = usablesIcons[0] == null ? 0 : 1;
-            float height = 0.13f - 0.06f * slotIndex;
+            int slotIndex;
 
+            if (IsFullyOccupied())
+            {
+                slotIndex = new System.Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed +
+                    100 + NameFormatter.GetIdFromString(itemName)).Next(2);
+                Run(Pop(slotIndex == 0));
+            }
+            else
+            {
+                slotIndex = usables[0] == null ? 0 : 1;
+            }
+
+            float height = 0.13f - 0.06f * slotIndex;
             GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
                 new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero,
                 new Vector2(0.97f, height), new Vector2(0.97f, height)));
 
-            CanvasUtil.CreateImagePanel(basePanel, RandomizerMod.RandomizerMod.GetSprite(spriteKey),
+            CanvasUtil.CreateImagePanel(basePanel, RandomizerMod.RandomizerMod.GetSprite(usable.GetItemSpriteKey()),
                 new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0f),
                     new Vector2(0f, 0f)));
 
-            usablesNames[slotIndex] = itemName;
+            usables[slotIndex] = usable;
             usablesIcons[slotIndex] = basePanel;
         }
 
-        public string Pop(bool wasUpperSlotUsed)
+        public (IUsable Usable, GameObject Icon) Pop(bool wasUpperSlotUsed)
         {
             int slotIndex = wasUpperSlotUsed ? 0 : 1;
-            Object.Destroy(usablesIcons[slotIndex]);
+
+
+            IUsable usable = usables[slotIndex];
+            usables[slotIndex] = null;
+
+            GameObject icon = usablesIcons[slotIndex];
+            //Object.Destroy(usablesIcons[slotIndex]);
             usablesIcons[slotIndex] = null;
 
-            string usableName = usablesNames[slotIndex];
-            usablesNames[slotIndex] = null;
-            return usableName;
+            return (usable, icon);
         }
 
-        public string GetString(int index)
+        private void Run((IUsable Usable, GameObject icon) pair)
         {
-            return usablesNames[index];
-        }
-
-        internal IEnumerator updatingDuration(float duration)
-        {
-            Color usablesColour = usablesIcons[0].gameObject.GetComponent<SpriteRenderer>().color;
-            while (usablesColour.a != 0f)
+            if (pair.Usable is IRevertable)
             {
-                usablesColour.a -= 0.1f;
-                yield return new WaitForSeconds(duration/10);
+                IRevertable revertable = pair.Usable as IRevertable;
+                GameManager.instance.StartCoroutine(ShowDuration(pair.icon, revertable));
             }
-            Object.Destroy(usablesIcons[0]);
-            usablesIcons[0] = null;
+            else
+            {
+                Object.Destroy(pair.icon);
+            }
+            usablesExecuter.RunUsable(pair.Usable);
+        }
 
-            string usableName = usablesNames[0];
-            usablesNames[0] = null;
+        internal IEnumerator ShowDuration(GameObject usableIcon, IRevertable revertable)
+        {
+            LogHelper.Log($"usableIcon: {usableIcon == null}, revertable: {revertable == null}");
+            LogHelper.Log($"usableIcon.GetComponentInChildren<Image>() {usableIcon.GetComponentInChildren<Image>() == null}");
+            Color usableIconColor = usableIcon.GetComponentInChildren<Image>().color;
+            LogHelper.Log($"usableIconColor {usableIconColor == null}");
+            float duration = revertable.GetDuration();
+            while (usableIconColor.a > 0f)
+            {
+                LogHelper.Log($"usableIconColor.a {usableIconColor.a}");
+                yield return new WaitForSeconds(duration / 10);
+                usableIconColor.a -= 0.1f;
+            }
+
+            Object.Destroy(usableIcon);
+        }
+
+        private IEnumerator TriggerUsablesByInputs()
+        {
+            while (!GameManager.instance.IsMenuScene())
+            {
+                if (InputHandler.Instance.inputActions.quickMap.IsPressed)
+                {
+                    if (InputHandler.Instance.inputActions.up.IsPressed)
+                    {
+                        if (usables[0] != null)
+                            Run(Pop(true));
+                    }
+                    else if (InputHandler.Instance.inputActions.down.IsPressed)
+                    {
+                        if (usables[1] != null)
+                            Run(Pop(false));
+                    }
+                }
+
+                yield return new WaitForSeconds(0.1f);
+            }
         }
 
         public bool IsFullyOccupied()
@@ -104,12 +159,14 @@ namespace UsablesMod
         {
             if (canvas == null) return;
             canvas.SetActive(true);
+            usablesTriggerRoutine = GameManager.instance.StartCoroutine(TriggerUsablesByInputs());
         }
 
         public void Hide()
         {
             if (canvas == null) return;
             canvas.SetActive(false);
+            GameManager.instance.StopCoroutine(usablesTriggerRoutine);
         }
 
         internal void Hook()
