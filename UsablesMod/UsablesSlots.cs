@@ -114,6 +114,7 @@ namespace UsablesMod
 
         private void Run((IUsable Usable, GameObject icon) pair)
         {
+            usablesExecuter.RunUsable(pair.Usable);
             if (pair.Usable is IRevertable)
             {
                 IRevertable revertable = pair.Usable as IRevertable;
@@ -123,24 +124,41 @@ namespace UsablesMod
             {
                 Object.Destroy(pair.icon);
             }
-            usablesExecuter.RunUsable(pair.Usable);
         }
 
         internal IEnumerator ShowDuration(GameObject usableIcon, IRevertable revertable)
         {
-            LogHelper.Log($"usableIcon: {usableIcon == null}, revertable: {revertable == null}");
-            LogHelper.Log($"usableIcon.GetComponentInChildren<Image>() {usableIcon.GetComponentInChildren<Image>() == null}");
-            Color usableIconColor = usableIcon.GetComponentInChildren<Image>().color;
-            LogHelper.Log($"usableIconColor {usableIconColor == null}");
+            //GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
+            //    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero,
+            //    new Vector2(0.01f, 0.1f), new Vector2(0.01f, 0.1f)));
+            //CanvasUtil.CreateImagePanel(basePanel, RandomizerMod.RandomizerMod.GetSprite(revertable.),
+            //    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0f),
+            //        new Vector2(0f, 0f)));
+            Vector2 newPos = new Vector2(0.11f, 0.76f);
+            usableIcon.GetComponent<RectTransform>().anchorMin = newPos;
+            usableIcon.GetComponent<RectTransform>().anchorMax = newPos;
             float duration = revertable.GetDuration();
-            while (usableIconColor.a > 0f)
-            {
-                LogHelper.Log($"usableIconColor.a {usableIconColor.a}");
-                yield return new WaitForSeconds(duration / 10);
-                usableIconColor.a -= 0.1f;
+            float timer = duration;
+            Image iconImg = usableIcon.GetComponentInChildren<Image>();
+            Color color = iconImg.color;
+            iconImg.type = Image.Type.Filled;
+            iconImg.fillMethod = Image.FillMethod.Radial360;
+            iconImg.fillAmount = 0f;
+            LogHelper.Log(duration);
+            while (timer >= 0)
+            { 
+                color.a = Map(timer, duration, 1f, 1f, 0.5f);
+                iconImg.color = color;
+                iconImg.fillAmount = Map(timer, duration, 1f, 1f, 0.1f); ;
+                timer -= 0.1f;
+                yield return new WaitForSeconds(0.1f);
             }
-
             Object.Destroy(usableIcon);
+        }
+
+        private float Map(float s, float a1, float a2, float b1, float b2)
+        {
+            return b1 + (s - a1) * (b2 - b1) / (a2 - a1);
         }
 
         private IEnumerator TriggerUsablesByInputs()
