@@ -78,7 +78,7 @@ namespace UsablesMod.Usables
 
         public string GetItemSpriteKey()
         {
-            return "ShopIcons.Focus";
+            return "ShopIcons.MaskShard";
         }
     }
 }
