@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UsablesMod.Usables;
 
 namespace UsablesMod
@@ -113,6 +114,7 @@ namespace UsablesMod
                 }
             }
         }
+
         internal void RegisterUsable(string usableItemName, IUsable usable)
         {
             SetUsableItemData(usableItemName, usable);
@@ -160,6 +162,11 @@ namespace UsablesMod
         {
             IUsable usable = usables[itemName];
             usablesSlots.Add(itemName, usable);
+        }
+
+        internal IUsable GetUsable(string itemName)
+        {
+            return usables[itemName];
         }
 
         internal bool IsAUsable(string item)

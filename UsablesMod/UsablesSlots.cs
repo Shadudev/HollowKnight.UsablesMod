@@ -1,5 +1,6 @@
 ﻿using Modding;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UsablesMod.Usables;
@@ -85,6 +86,11 @@ namespace UsablesMod
                 slotIndex = usables[0] == null ? 0 : 1;
             }
 
+            Insert(itemName, usable, slotIndex);
+        }
+
+        public void Insert(string itemName, IUsable usable, int slotIndex)
+        {
             float height = 0.145f - 0.065f * slotIndex;
             GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
                 new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero,
@@ -96,6 +102,7 @@ namespace UsablesMod
 
             usables[slotIndex] = usable;
             usablesIcons[slotIndex] = basePanel;
+            UsablesMod.Instance.Settings.usablesSlots[slotIndex] = itemName;
         }
 
         public (IUsable Usable, GameObject Icon) Pop(bool wasUpperSlotUsed)
@@ -107,6 +114,8 @@ namespace UsablesMod
 
             GameObject icon = usablesIcons[slotIndex];
             usablesIcons[slotIndex] = null;
+
+            UsablesMod.Instance.Settings.usablesSlots.Remove(slotIndex);
 
             return (usable, icon);
         }
@@ -186,6 +195,18 @@ namespace UsablesMod
         private void OnLoad(SaveGameData data)
         {
             Create();
+            GameManager.instance.StartCoroutine(LoadUsablesFromSettings());
+        }
+
+        private IEnumerator LoadUsablesFromSettings()
+        {
+            List<int> slots = new List<int>(UsablesMod.Instance.Settings.usablesSlots.Keys);
+            foreach (int slot in slots)
+            {
+                string itemName = UsablesMod.Instance.Settings.usablesSlots[slot];
+                Insert(itemName, UsablesMod.Instance.UsablesManager.GetUsable(itemName), slot);
+            }
+            yield return null;
         }
 
         private IEnumerator OnQuitToMenu(On.QuitToMenu.orig_Start orig, QuitToMenu self)

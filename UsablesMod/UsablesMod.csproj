@@ -70,6 +70,7 @@
     <Compile Include="ActiveUsablesBar.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="NameFormatter.cs" />
+    <Compile Include="SaveSettings.cs" />
     <Compile Include="UsablesExecuter.cs" />
     <Compile Include="UsablesFactory.cs" />
     <Compile Include="UsablesSlots.cs" />

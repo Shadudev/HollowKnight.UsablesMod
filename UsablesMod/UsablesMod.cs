@@ -6,7 +6,14 @@ namespace UsablesMod
     {
         public static UsablesMod Instance { get; private set; }
 
-        internal UsablesManager usablesManager;
+        internal UsablesManager UsablesManager;
+
+        public SaveSettings Settings { get; set; } = new SaveSettings();
+        public override ModSettings SaveSettings
+        {
+            get => Settings = Settings ?? new SaveSettings();
+            set => Settings = value is SaveSettings saveSettings ? saveSettings : Settings;
+        }
 
         public override void Initialize()
         {
@@ -17,19 +24,19 @@ namespace UsablesMod
             }
 
             Instance = this;
-            usablesManager = new UsablesManager();
+            UsablesManager = new UsablesManager();
 
-            RandomizerMod.Randomization.ItemManager.AddItemsToRandomizedItemsSet += usablesManager.AddUsableItemsToSet;
+            RandomizerMod.Randomization.ItemManager.AddItemsToRandomizedItemsSet += UsablesManager.AddUsableItemsToSet;
             RandomizerMod.GiveItemActions.ExternItemHandlers.Add(TriggerUsable);
-            RandomizerMod.SaveSettings.PreAfterDeserialize += usablesManager.LoadMissingItems;
+            RandomizerMod.SaveSettings.PreAfterDeserialize += UsablesManager.LoadMissingItems;
         }
 
         private bool TriggerUsable(RandomizerMod.GiveItemActions.GiveAction action,
 			string item, string location, int geo)
         {
-            if (!usablesManager.IsAUsable(item)) return false;
+            if (!UsablesManager.IsAUsable(item)) return false;
 
-            usablesManager.AddToSlots(item);
+            UsablesManager.AddToSlots(item);
 
             RandomizerMod.RandoLogger.LogItemToTracker(item, location);
             RandomizerMod.RandomizerMod.Instance.Settings.MarkItemFound(item);
@@ -48,10 +55,10 @@ namespace UsablesMod
         public void Unload()
         {
 			Instance = null;
-            RandomizerMod.Randomization.ItemManager.AddItemsToRandomizedItemsSet -= usablesManager.AddUsableItemsToSet;
+            RandomizerMod.Randomization.ItemManager.AddItemsToRandomizedItemsSet -= UsablesManager.AddUsableItemsToSet;
             RandomizerMod.GiveItemActions.ExternItemHandlers.Remove(TriggerUsable);
-            RandomizerMod.SaveSettings.PreAfterDeserialize -= usablesManager.LoadMissingItems;
-            usablesManager = null;
+            RandomizerMod.SaveSettings.PreAfterDeserialize -= UsablesManager.LoadMissingItems;
+            UsablesManager = null;
         }
     }
 }
