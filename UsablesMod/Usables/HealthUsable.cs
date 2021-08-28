@@ -28,11 +28,6 @@ namespace UsablesMod.Usables
             }
         }
 
-        public bool IsRevertable()
-        {
-            return true;
-        }
-
         public float GetDuration()
         {
             return 30f;
