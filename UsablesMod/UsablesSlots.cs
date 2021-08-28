@@ -38,7 +38,23 @@ namespace UsablesMod
 
             CanvasUtil.CreateTextPanel(canvas, "Usables", 18, TextAnchor.MiddleCenter,
                 new CanvasUtil.RectData(new Vector2(200, 100), Vector2.zero,
-                new Vector2(0.94f, 0.15f), new Vector2(0.98f, 0.15f)));
+                new Vector2(0.941f, 0.18f), new Vector2(0.981f, 0.18f)));
+
+            CanvasUtil.CreateImagePanel(canvas, RandomizerMod.RandomizerMod.GetSprite("ShopIcons.Map"),
+                new CanvasUtil.RectData(new Vector2(33, 33), Vector2.zero,
+                new Vector2(0.963f, 0.09f), new Vector2(0.963f, 0.09f)));
+
+            CanvasUtil.CreateImagePanel(canvas, RandomizerMod.RandomizerMod.GetSprite("ShopIcons.Upslash"),
+                new CanvasUtil.RectData(new Vector2(33, 33), Vector2.zero,
+                new Vector2(0.963f, 0.16f), new Vector2(0.963f, 0.16f)));
+
+            GameObject downSlashPanel = CanvasUtil.CreateBasePanel(canvas,
+                new CanvasUtil.RectData(new Vector2(33, 33), Vector2.zero,
+                new Vector2(0.963f, 0.018f), new Vector2(0.963f, 0.018f)));
+            Image downSlashImage = downSlashPanel.AddComponent<Image>();
+            downSlashImage.sprite = RandomizerMod.RandomizerMod.GetSprite("ShopIcons.Upslash");
+            downSlashImage.preserveAspect = true;
+            downSlashImage.transform.rotation = Quaternion.Euler(0, 0, 180f);
 
             if (invPanels <= 0) Show();
         }
@@ -69,10 +85,10 @@ namespace UsablesMod
                 slotIndex = usables[0] == null ? 0 : 1;
             }
 
-            float height = 0.13f - 0.06f * slotIndex;
+            float height = 0.145f - 0.065f * slotIndex;
             GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
                 new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero,
-                new Vector2(0.97f, height), new Vector2(0.97f, height)));
+                new Vector2(0.976f, height), new Vector2(0.976f, height)));
 
             CanvasUtil.CreateImagePanel(basePanel, RandomizerMod.RandomizerMod.GetSprite(usable.GetItemSpriteKey()),
                 new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0f),
@@ -91,7 +107,6 @@ namespace UsablesMod
             usables[slotIndex] = null;
 
             GameObject icon = usablesIcons[slotIndex];
-            //Object.Destroy(usablesIcons[slotIndex]);
             usablesIcons[slotIndex] = null;
 
             return (usable, icon);
@@ -193,7 +208,11 @@ namespace UsablesMod
         {
             if (canvas == null) return;
             canvas.SetActive(false);
-            GameManager.instance.StopCoroutine(usablesTriggerRoutine);
+            if (usablesTriggerRoutine != null)
+            {
+                GameManager.instance.StopCoroutine(usablesTriggerRoutine);
+                usablesTriggerRoutine = null;
+            }
         }
 
         internal void Hook()

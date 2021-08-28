@@ -2,10 +2,13 @@
 {
     class OvercharmedUsable : IUsable, IRevertable
     {
+        private static float unifiedDuration = 0;
+
         public OvercharmedUsable() {}
 
         public void Run()
         {
+            unifiedDuration += 90f;
             SetOvercharm();
         }
 
@@ -16,12 +19,16 @@
 
         public float GetDuration()
         {
-            return 90f;
+            // Case for 2+ instances of usable running before 1st was reverted
+            if (unifiedDuration != 90) return 0;
+
+            return unifiedDuration;
         }
 
         public void Revert()
         {
             GameManager.instance.RefreshOvercharm();
+            unifiedDuration = 0;
         }
 
         public string GetName()

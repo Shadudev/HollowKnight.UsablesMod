@@ -5,6 +5,8 @@ namespace UsablesMod.Usables
 {
     class BounceUsable : IUsable, IRevertable
     {
+        private static float unifiedDuration = 0;
+
         private readonly System.Random random;
         private bool bouncing = false;
 
@@ -15,6 +17,7 @@ namespace UsablesMod.Usables
 
         public void Run()
         {
+            unifiedDuration += 45f;
             bouncing = true;
             GameManager.instance.StartCoroutine(Bouncing());
         }
@@ -26,12 +29,16 @@ namespace UsablesMod.Usables
 
         public float GetDuration()
         {
-            return 45f;
+            // Case for 2+ instances of usable running before 1st was reverted
+            if (unifiedDuration != 45f) return 0;
+
+            return unifiedDuration;
         }
 
         public void Revert()
         {
             bouncing = false;
+            unifiedDuration = 0;
         }
 
         private IEnumerator Bouncing()
