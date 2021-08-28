@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveUsablesBar.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="NameFormatter.cs" />
     <Compile Include="UsablesExecuter.cs" />

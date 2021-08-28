@@ -1,48 +1,68 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UsablesMod.Usables;
 
 namespace UsablesMod
 {
     class UsablesExecuter : MonoBehaviour
     {
-        public void RunUsable(IUsable usable)
+        private readonly ActiveUsablesBar usablesBar;
+
+        internal UsablesExecuter()
         {
-            GameManager.instance.StartCoroutine(RunUsableRoutine(usable));
+            usablesBar = new ActiveUsablesBar();
         }
 
-        private IEnumerator RunUsableRoutine(IUsable usable)
+        public void RunUsable((IUsable Usable, GameObject icon) pair)
         {
-            LogHelper.Log($"Running {usable.GetName()} routine");
-            usable.Run();
-            if (usable is IRevertable)
+            GameManager.instance.StartCoroutine(RunUsableRoutine(pair));
+        }
+
+        private IEnumerator RunUsableRoutine((IUsable Usable, GameObject icon) pair)
+        {
+            LogHelper.Log($"Running {pair.Usable.GetName()} routine");
+            pair.Usable.Run();
+            if (pair.Usable is IRevertable)
             {
-                IRevertable revertable = usable as IRevertable;
-                yield return Revert(revertable, usable.GetName());
+                IRevertable revertable = pair.Usable as IRevertable;
+                yield return Revert(revertable, pair.Usable.GetName(), pair.icon);
+            }
+            else
+            {
+                Destroy(pair.icon);
             }
         }
 
-        private IEnumerator Revert(IRevertable revertable, string name)
+        private IEnumerator Revert(IRevertable revertable, string name, GameObject icon)
         {
             float duration = revertable.GetDuration();
-            LogHelper.Log($"Reverting {name}");
-            yield return new WaitForSeconds(duration);
-
-            float newDuration = revertable.GetDuration();
-            float newDurationDiff = newDuration - duration;
-            while (newDurationDiff > 0)
+            if (duration > 0)
             {
-                LogHelper.Log($"Adding {newDurationDiff} before reverting {name}");
-                duration = newDuration;
+                usablesBar.Add(icon, revertable.GetDuration);
 
-                yield return new WaitForSeconds(newDurationDiff);
+                yield return new WaitForSeconds(duration);
 
-                newDuration = revertable.GetDuration();
-                newDurationDiff = newDuration - duration;
+                float newDuration = revertable.GetDuration();
+                float newDurationDiff = newDuration - duration;
+                while (newDurationDiff > 0)
+                {
+                    LogHelper.Log($"Adding {newDurationDiff} before reverting {name}");
+                    duration = newDuration;
+
+                    yield return new WaitForSeconds(newDurationDiff);
+
+                    newDuration = revertable.GetDuration();
+                    newDurationDiff = newDuration - duration;
+                }
+
+                usablesBar.Remove(icon);
             }
 
             LogHelper.Log($"Reverting {name}");
             revertable.Revert();
+
+            Destroy(icon);
         }
     }
 }
