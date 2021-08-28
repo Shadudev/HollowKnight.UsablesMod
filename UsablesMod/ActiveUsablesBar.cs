@@ -8,12 +8,12 @@ namespace UsablesMod
 {
     class ActiveUsablesBar
     {
-        private readonly Dictionary<GameObject, float> iconsDurations;
+        private readonly Dictionary<GameObject, Func<float>> iconsDurations;
         private readonly List<GameObject> iconsBar;
 
         internal ActiveUsablesBar()
         {
-            iconsDurations = new Dictionary<GameObject, float>();
+            iconsDurations = new Dictionary<GameObject, Func<float>>();
             iconsBar = new List<GameObject>();
         }
 
@@ -21,12 +21,12 @@ namespace UsablesMod
         {
             if (!iconsDurations.ContainsKey(icon))
             {
-                iconsDurations[icon] = getDurationFunc();
+                iconsDurations[icon] = getDurationFunc;
                 iconsBar.Add(icon);
             }
             else 
             {
-                iconsDurations[icon] += getDurationFunc();
+                iconsDurations[icon] += getDurationFunc;
             }
 
             GameManager.instance.StartCoroutine(ShowDuration(icon));
@@ -38,19 +38,19 @@ namespace UsablesMod
             icon.GetComponent<RectTransform>().anchorMin = newPos;
             icon.GetComponent<RectTransform>().anchorMax = newPos;
             
-            float timer = iconsDurations[icon];
+            float timer = 0;
             Image iconImg = icon.GetComponentInChildren<Image>();
             iconImg.type = Image.Type.Filled;
             iconImg.fillMethod = Image.FillMethod.Radial360;
             iconImg.fillAmount = 0f;
             
-            while (timer >= 0)
+            while (timer < iconsDurations[icon]())
             {
                 if (!iconsDurations.ContainsKey(icon)) break;
 
-                float duration = iconsDurations[icon];
-                iconImg.fillAmount = Map(timer, duration, 1f, 1f, 0.1f);
-                timer -= 0.1f;
+                float duration = iconsDurations[icon]();
+                iconImg.fillAmount = Map(duration - timer, duration, 1f, 1f, 0.1f);
+                timer += 0.1f;
                 yield return new WaitForSeconds(0.1f);
             }
         }
