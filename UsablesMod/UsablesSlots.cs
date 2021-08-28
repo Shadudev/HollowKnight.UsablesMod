@@ -114,6 +114,7 @@ namespace UsablesMod
 
         private void Run((IUsable Usable, GameObject icon) pair)
         {
+            usablesExecuter.RunUsable(pair.Usable);
             if (pair.Usable is IRevertable)
             {
                 IRevertable revertable = pair.Usable as IRevertable;
@@ -123,45 +124,35 @@ namespace UsablesMod
             {
                 Object.Destroy(pair.icon);
             }
-            usablesExecuter.RunUsable(pair.Usable);
-        }
-
-        Image OnPostRender()
-        {
-            LogHelper.Log("Rendering Image");
-            GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
-                new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero,
-                new Vector2(0.97f, 0.13f - 0.06f), new Vector2(0.97f, 0.13f - 0.06f)));
-            Texture2D whiteText = Texture2D.whiteTexture;
-            Sprite whiteSquare = Sprite.Create(whiteText, new Rect(0.0f, 0.0f, whiteText.width, whiteText.height), new Vector2(0.5f, 0.5f), 100.0f);
-            GameObject panel = CanvasUtil.CreateImagePanel(basePanel, whiteSquare, new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0f),new Vector2(0f, 0f)));
-            Image img = panel.GetComponent<Image>();
-            img.type = Image.Type.Filled;
-            img.fillMethod = Image.FillMethod.Radial360;
-            img.fillAmount = 0f;
-            
-            return img;
         }
 
         internal IEnumerator ShowDuration(GameObject usableIcon, IRevertable revertable)
         {
-            LogHelper.Log($"usableIcon: {usableIcon == null}, revertable: {revertable == null}");
-            LogHelper.Log($"usableIcon.GetComponentInChildren<Image>() {GameObject.Find("Image") == null}");
-            Color usableIconColor = usableIcon.GetComponentInChildren<Image>().color;
-            LogHelper.Log($"usableIconColor {usableIconColor == null}");
+            //GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
+            //    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero,
+            //    new Vector2(0.01f, 0.1f), new Vector2(0.01f, 0.1f)));
+            //CanvasUtil.CreateImagePanel(basePanel, RandomizerMod.RandomizerMod.GetSprite(revertable.),
+            //    new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0f),
+            //        new Vector2(0f, 0f)));
+            Vector2 newPos = new Vector2(0.11f, 0.76f);
+            usableIcon.GetComponent<RectTransform>().anchorMin = newPos;
+            usableIcon.GetComponent<RectTransform>().anchorMax = newPos;
             float duration = revertable.GetDuration();
-            float timer = 0f;
-            Image img = OnPostRender();
-          
-            while (timer <= duration)
-            {
-                LogHelper.Log($"img.fillAmount {img.fillAmount}");
-
-                //usableIconColor.a -= 0.1f;
-                img.fillAmount += Map(timer, 1f, duration,0.1f, 1f);
+            float timer = duration;
+            Image iconImg = usableIcon.GetComponentInChildren<Image>();
+            Color color = iconImg.color;
+            iconImg.type = Image.Type.Filled;
+            iconImg.fillMethod = Image.FillMethod.Radial360;
+            iconImg.fillAmount = 0f;
+            LogHelper.Log(duration);
+            while (timer >= 0)
+            { 
+                color.a = Map(timer, duration, 1f, 1f, 0.5f);
+                iconImg.color = color;
+                iconImg.fillAmount = Map(timer, duration, 1f, 1f, 0.1f); ;
+                timer -= 0.1f;
                 yield return new WaitForSeconds(0.1f);
             }
-
             Object.Destroy(usableIcon);
         }
 
