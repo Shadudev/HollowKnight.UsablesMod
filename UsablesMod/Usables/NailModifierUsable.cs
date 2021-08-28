@@ -52,7 +52,6 @@ namespace UsablesMod.Usables
         private void ChangeNailScale(On.NailSlash.orig_StartSlash orig, NailSlash self)
         {
             orig(self);
-
             self.transform.localScale *= nailScaleMultiplier;
         }
 

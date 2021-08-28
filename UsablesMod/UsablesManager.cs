@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UsablesMod.Usables;
-using UnityEngine;
 
 namespace UsablesMod
 {
@@ -32,7 +31,8 @@ namespace UsablesMod
             {
                 IUsable usable = factory.GetRandomUsable(randomSeed: RandomizerMod.RandomizerMod.Instance.Settings.Seed + i);
 
-                string usableItemName = NameFormatter.AddIdToName(usable.GetName(), i);
+                string usableItemName = NameFormatter.AddIdToName(usable.GetName(),
+                    RandomizerMod.RandomizerMod.Instance.Settings.Seed + i);
 
                 SetUsableItemData(usableItemName, usable);
 
@@ -130,7 +130,7 @@ namespace UsablesMod
 
         private static void CreateUsablesReqDefs()
         {
-            foreach (string usableName in UsablesFactory.USABLE_NAMES)
+            foreach (string usableName in UsablesFactory.USABLES_NAMES)
             {
                 UsablesFactory.TryCreateUsable(NameFormatter.AddIdToName(usableName, 0), out IUsable usable);
                 RandomizerMod.LanguageStringManager.SetString("UI", usableName, usable.GetDisplayName());
@@ -165,7 +165,7 @@ namespace UsablesMod
 
         internal bool IsAUsable(string item)
         {
-            foreach (string usableName in UsablesFactory.USABLE_NAMES)
+            foreach (string usableName in UsablesFactory.USABLES_NAMES)
                 if (item.StartsWith(usableName))
                     return true;
 

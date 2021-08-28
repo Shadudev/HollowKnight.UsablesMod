@@ -5,15 +5,15 @@ namespace UsablesMod
 {
     class UsablesFactory
     {
-        private static readonly int USABLES_AMOUNT = 10;
+        internal static readonly string[] USABLES_NAMES;
 
         private readonly Random random;
 
-        internal static readonly string[] USABLE_NAMES = new string[USABLES_AMOUNT];
         static UsablesFactory()
         {
-            for (int i = 0; i < USABLES_AMOUNT; i++)
-                USABLE_NAMES[i] = CreateUsableById(i).GetName();
+            USABLES_NAMES = new string[CountUsables()];
+            for (int i = 0; i < USABLES_NAMES.Length; i++)
+                USABLES_NAMES[i] = CreateUsableById(i).GetName();
         }
 
         internal UsablesFactory()
@@ -21,9 +21,16 @@ namespace UsablesMod
             random = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed);
         }
 
+        private static int CountUsables()
+        {
+            int i;
+            for (i = 0; !(CreateUsableById(i) is SampleUsable); i++);
+            return i;
+        }
+
         internal IUsable GetRandomUsable(int randomSeed = -1)
         {
-            return CreateUsableById(random.Next(USABLES_AMOUNT), randomSeed);
+            return CreateUsableById(random.Next(USABLES_NAMES.Length), randomSeed);
         }
 
         private static IUsable CreateUsableById(int i, int randomSeed = -1)
@@ -60,9 +67,9 @@ namespace UsablesMod
             int usableId = NameFormatter.GetIdFromString(descriptor);
             if (usableId != -1)
             {
-                for (int i = 0; i < USABLES_AMOUNT; i++)
+                for (int i = 0; i < USABLES_NAMES.Length; i++)
                 {
-                    IUsable _usable = CreateUsableById(i, randomSeed: RandomizerMod.RandomizerMod.Instance.Settings.Seed + usableId);
+                    IUsable _usable = CreateUsableById(i, randomSeed: usableId);
                     if (descriptor.StartsWith(_usable.GetName()))
                     {
                         usable = _usable;
