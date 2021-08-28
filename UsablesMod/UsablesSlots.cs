@@ -111,21 +111,48 @@ namespace UsablesMod
             usablesExecuter.RunUsable(pair.Usable);
         }
 
+        Image OnPostRender()
+        {
+            LogHelper.Log("Rendering Image");
+            GameObject basePanel = CanvasUtil.CreateBasePanel(canvas,
+                new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero,
+                new Vector2(0.97f, 0.13f - 0.06f), new Vector2(0.97f, 0.13f - 0.06f)));
+            Texture2D whiteText = Texture2D.whiteTexture;
+            Sprite whiteSquare = Sprite.Create(whiteText, new Rect(0.0f, 0.0f, whiteText.width, whiteText.height), new Vector2(0.5f, 0.5f), 100.0f);
+            GameObject panel = CanvasUtil.CreateImagePanel(basePanel, whiteSquare, new CanvasUtil.RectData(new Vector2(50, 50), Vector2.zero, new Vector2(0f, 0f),new Vector2(0f, 0f)));
+            Image img = panel.GetComponent<Image>();
+            img.type = Image.Type.Filled;
+            img.fillMethod = Image.FillMethod.Radial360;
+            img.fillAmount = 0f;
+            
+            return img;
+        }
+
         internal IEnumerator ShowDuration(GameObject usableIcon, IRevertable revertable)
         {
             LogHelper.Log($"usableIcon: {usableIcon == null}, revertable: {revertable == null}");
-            LogHelper.Log($"usableIcon.GetComponentInChildren<Image>() {usableIcon.GetComponentInChildren<Image>() == null}");
+            LogHelper.Log($"usableIcon.GetComponentInChildren<Image>() {GameObject.Find("Image") == null}");
             Color usableIconColor = usableIcon.GetComponentInChildren<Image>().color;
             LogHelper.Log($"usableIconColor {usableIconColor == null}");
             float duration = revertable.GetDuration();
-            while (usableIconColor.a > 0f)
+            float timer = 0f;
+            Image img = OnPostRender();
+          
+            while (timer <= duration)
             {
-                LogHelper.Log($"usableIconColor.a {usableIconColor.a}");
-                yield return new WaitForSeconds(duration / 10);
-                usableIconColor.a -= 0.1f;
+                LogHelper.Log($"img.fillAmount {img.fillAmount}");
+
+                //usableIconColor.a -= 0.1f;
+                img.fillAmount += Map(timer, 1f, duration,0.1f, 1f);
+                yield return new WaitForSeconds(0.1f);
             }
 
             Object.Destroy(usableIcon);
+        }
+
+        private float Map(float s, float a1, float a2, float b1, float b2)
+        {
+            return b1 + (s - a1) * (b2 - b1) / (a2 - a1);
         }
 
         private IEnumerator TriggerUsablesByInputs()
