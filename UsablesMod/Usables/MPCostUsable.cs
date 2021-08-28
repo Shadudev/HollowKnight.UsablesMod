@@ -1,5 +1,4 @@
 ﻿using HutongGames.PlayMaker;
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,13 +6,15 @@ namespace UsablesMod.Usables
 {
     class MPCostUsable : IUsable, IRevertable
     {
-        bool running = false;
+        private bool running = false;
         private readonly int multiplier;
         private FsmInt mpCost;
+        private string displayName;
 
         public MPCostUsable(int randomSeed)
         {
             multiplier = new System.Random(randomSeed).Next(0, 2) * 2;
+            displayName = "Stell Twisper";
         }
 
         public void Run()
@@ -21,6 +22,15 @@ namespace UsablesMod.Usables
             running = true;
             mpCost = HeroController.instance.gameObject.LocateMyFSM("Spell Control").FsmVariables.FindFsmInt("MP Cost");
             mpCost.Value *= multiplier;
+            if (multiplier > 1)
+            {
+                displayName = "Soul Eater";
+            }
+            else
+            {
+                displayName = "Stell Twisperer";
+            }
+
             GameManager.instance.StartCoroutine(WaitingForBench());
         }
 
@@ -58,7 +68,7 @@ namespace UsablesMod.Usables
         }
         public string GetDisplayName()
         {
-            return "Stell Twisper";
+            return displayName;
         }
         public string GetDescription()
         {
