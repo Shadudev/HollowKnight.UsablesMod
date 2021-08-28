@@ -7,10 +7,12 @@ namespace UsablesMod.Usables
     {
         private readonly System.Random random;
         private bool running;
+        private string displayName;
 
         public HealthUsable(int randomSeed)
         {
             random = new System.Random(randomSeed);
+            displayName = "Health Supply";
         }
 
         public void Run()
@@ -21,10 +23,12 @@ namespace UsablesMod.Usables
             if (amount == 1)
             {
                 GameManager.instance.StartCoroutine(Regeneration());
+                displayName = "Regeneration";
             }
             else
             {
                 GameManager.instance.StartCoroutine(Poison());
+                displayName = "Poison";
             }
         }
 
@@ -64,7 +68,7 @@ namespace UsablesMod.Usables
 
         public string GetDisplayName()
         {
-            return "Health Supply";
+            return displayName;
         }
 
         public string GetDescription()

@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UsablesMod.Usables;
 
 namespace UsablesMod
@@ -17,6 +17,21 @@ namespace UsablesMod
         public void RunUsable((IUsable Usable, GameObject icon) pair)
         {
             GameManager.instance.StartCoroutine(RunUsableRoutine(pair));
+            ShowUsablePopup(pair.Usable);
+        }
+
+        private void ShowUsablePopup(IUsable usable)
+        {
+            string itemDefKey = "usablePopUp";
+            string displayName = usable.GetDisplayName();
+            string spriteKey = usable.GetItemSpriteKey();
+
+            RandomizerMod.Randomization.LogicManager.EditItemDef(itemDefKey, 
+                new RandomizerMod.Randomization.ReqDef() { nameKey = itemDefKey, shopSpriteKey = spriteKey });
+
+            RandomizerMod.LanguageStringManager.SetString("UI", itemDefKey, displayName);
+
+            RandomizerMod.GiveItemActions.ShowEffectiveItemPopup(itemDefKey);
         }
 
         private IEnumerator RunUsableRoutine((IUsable Usable, GameObject icon) pair)

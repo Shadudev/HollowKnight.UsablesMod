@@ -41,7 +41,7 @@ namespace UsablesMod
 
         public override string GetVersion()
         {
-            string ver = "0.0.2";
+            string ver = "0.0.3";
             return ver;
         }
 
