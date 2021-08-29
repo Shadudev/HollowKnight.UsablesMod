@@ -9,14 +9,15 @@ namespace UsablesMod
         private static readonly int MIN_USABLES = 15, MAX_USABLES = 25;
         private static readonly int MAX_SWAPPED_GEO_ROCKS = 20, MAX_SWAPPED_SOUL_REFILLS = 6;
 
-        private readonly UsablesExecuter usablesExecuter;
+        private readonly UsablesSlots usablesSlots;
         private UsablesFactory factory;
 
-        internal Dictionary<string, IUsable> usables;
+        private Dictionary<string, IUsable> usables;
 
         public UsablesManager() 
         {
-            usablesExecuter = new UsablesExecuter();
+            usablesSlots = new UsablesSlots();
+            usablesSlots.Hook();
             CreateUsablesReqDefs();
         }
 
@@ -25,12 +26,14 @@ namespace UsablesMod
             usables = new Dictionary<string, IUsable>();
             factory = new UsablesFactory();
 
-            int amount = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(MIN_USABLES, MAX_USABLES + 1);
+            int amount = new System.Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(MIN_USABLES, MAX_USABLES + 1);
 
             for (int i = 0; i < amount; i++)
             {
                 IUsable usable = factory.GetRandomUsable(randomSeed: RandomizerMod.RandomizerMod.Instance.Settings.Seed + i);
-                string usableItemName = $"{usable.GetName()}_({i})";
+
+                string usableItemName = NameFormatter.AddIdToName(usable.GetName(),
+                    RandomizerMod.RandomizerMod.Instance.Settings.Seed + i);
 
                 SetUsableItemData(usableItemName, usable);
 
@@ -56,7 +59,7 @@ namespace UsablesMod
                 {
 
                     IUsable usable = factory.GetRandomUsable(randomSeed: RandomizerMod.RandomizerMod.Instance.Settings.Seed + indexOffset);
-                    string usableItemName = $"{usable.GetName()}_({indexOffset})";
+                    string usableItemName = NameFormatter.AddIdToName(usable.GetName(), indexOffset);
                     indexOffset++;
 
                     SetUsableItemData(usableItemName, usable);
@@ -70,7 +73,7 @@ namespace UsablesMod
                 {
 
                     IUsable usable = factory.GetRandomUsable(randomSeed: RandomizerMod.RandomizerMod.Instance.Settings.Seed + indexOffset);
-                    string usableItemName = $"{usable.GetName()}_({indexOffset})";
+                    string usableItemName = NameFormatter.AddIdToName(usable.GetName(), indexOffset);
                     indexOffset++;
 
                     SetUsableItemData(usableItemName, usable);
@@ -111,6 +114,7 @@ namespace UsablesMod
                 }
             }
         }
+
         internal void RegisterUsable(string usableItemName, IUsable usable)
         {
             SetUsableItemData(usableItemName, usable);
@@ -128,9 +132,9 @@ namespace UsablesMod
 
         private static void CreateUsablesReqDefs()
         {
-            foreach (string usableName in UsablesFactory.USABLE_NAMES)
+            foreach (string usableName in UsablesFactory.USABLES_NAMES)
             {
-                UsablesFactory.TryCreateUsable(usableName, out IUsable usable);
+                UsablesFactory.TryCreateUsable(NameFormatter.AddIdToName(usableName, 0), out IUsable usable);
                 RandomizerMod.LanguageStringManager.SetString("UI", usableName, usable.GetDisplayName());
 
                 string shopDescKey = usableName + "_SHOP_DESC";
@@ -150,24 +154,33 @@ namespace UsablesMod
                 {
                     usableDef.geo = 1;
                 }
-
                 RandomizerMod.Randomization.LogicManager.EditItemDef(usableName, usableDef);
             }
         }
 
-        internal void Run(string itemName)
+        internal void AddToSlots(string itemName)
         {
             IUsable usable = usables[itemName];
-            usablesExecuter.RunUsable(usable);
+            usablesSlots.Add(itemName, usable);
+        }
+
+        internal IUsable GetUsable(string itemName)
+        {
+            return usables[itemName];
         }
 
         internal bool IsAUsable(string item)
         {
-            foreach (string usableName in UsablesFactory.USABLE_NAMES)
+            foreach (string usableName in UsablesFactory.USABLES_NAMES)
                 if (item.StartsWith(usableName))
                     return true;
-
             return false;
+        }
+
+        ~UsablesManager()
+        {
+            usablesSlots.Destroy();
+            usablesSlots.UnHook();
         }
     }
 }

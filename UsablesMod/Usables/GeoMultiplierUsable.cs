@@ -6,20 +6,27 @@ namespace UsablesMod.Usables
     {
         private readonly bool isGoodMultiplier;
 
+        private Random random;
+        private string displayName;
+
         public GeoMultiplierUsable(int randomSeed)
         {
-            isGoodMultiplier = new Random(randomSeed).Next(2) == 0;
+            random = new Random(randomSeed);
+            isGoodMultiplier = random.Next(2) == 0;
+            displayName = "Geo Multiplier";
         }
 
         public void Run()
         {
             if (isGoodMultiplier)
             {
-                HeroController.instance.TakeGeo((int) (PlayerData.instance.geo * 0.6f));
+                HeroController.instance.TakeGeo(PlayerData.instance.geo * random.Next(2, 5) / 10);
+                displayName = "Thanks for the geo!";
             } 
             else
             {
-                HeroController.instance.AddGeo((int) (PlayerData.instance.geo * 0.6f)); ;
+                HeroController.instance.AddGeo(PlayerData.instance.geo * random.Next(6, 10) / 10);
+                displayName = "Ad Revenue";
             }
         }
 
@@ -29,7 +36,7 @@ namespace UsablesMod.Usables
         }
         public string GetDisplayName()
         {
-            return "Geo Multiplier";
+            return displayName;
         }
         public string GetDescription()
         {

@@ -7,10 +7,12 @@ namespace UsablesMod.Usables
     {
         private readonly System.Random random;
         private bool running;
+        private string displayName;
 
         public HealthUsable(int randomSeed)
         {
             random = new System.Random(randomSeed);
+            displayName = "Health Supply";
         }
 
         public void Run()
@@ -21,16 +23,13 @@ namespace UsablesMod.Usables
             if (amount == 1)
             {
                 GameManager.instance.StartCoroutine(Regeneration());
+                displayName = "Regeneration";
             }
             else
             {
                 GameManager.instance.StartCoroutine(Poison());
+                displayName = "Poison";
             }
-        }
-
-        public bool IsRevertable()
-        {
-            return true;
         }
 
         public float GetDuration()
@@ -56,7 +55,8 @@ namespace UsablesMod.Usables
         {
             while (running)
             {
-                HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.top, 1, 0);
+                GlobalEnums.CollisionSide ranHit = (GlobalEnums.CollisionSide)random.Next(5);
+                HeroController.instance.TakeDamage(HeroController.instance.gameObject, ranHit, 1, 0);
                 yield return new WaitForSeconds(random.Next(3, 12));
             }
         }
@@ -68,7 +68,7 @@ namespace UsablesMod.Usables
 
         public string GetDisplayName()
         {
-            return "Health Supply";
+            return displayName;
         }
 
         public string GetDescription()
@@ -78,7 +78,7 @@ namespace UsablesMod.Usables
 
         public string GetItemSpriteKey()
         {
-            return "ShopIcons.Focus";
+            return "ShopIcons.MaskShard";
         }
     }
 }
