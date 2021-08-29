@@ -19,16 +19,8 @@ namespace UsablesMod
 
         internal void Add(GameObject icon, Func<float> getDurationFunc)
         {
-            if (!iconsDurations.ContainsKey(icon))
-            {
-                iconsDurations[icon] = getDurationFunc;
-                iconsBar.Add(icon);
-            }
-            else 
-            {
-                iconsDurations[icon] += getDurationFunc;
-            }
-
+            iconsDurations[icon] = getDurationFunc;
+            iconsBar.Add(icon);
             GameManager.instance.StartCoroutine(ShowDuration(icon));
         }
 
@@ -44,10 +36,8 @@ namespace UsablesMod
             iconImg.fillMethod = Image.FillMethod.Radial360;
             iconImg.fillAmount = 0f;
             
-            while (timer < iconsDurations[icon]())
+            while (iconsDurations.ContainsKey(icon) && timer < iconsDurations[icon]())
             {
-                if (!iconsDurations.ContainsKey(icon)) break;
-
                 float duration = iconsDurations[icon]();
                 iconImg.fillAmount = Map(duration - timer, duration, 1f, 1f, 0.1f);
                 timer += 0.1f;
