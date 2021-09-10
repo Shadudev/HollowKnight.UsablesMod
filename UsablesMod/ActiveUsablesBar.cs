@@ -54,7 +54,12 @@ namespace UsablesMod
         {
             iconsDurations.Remove(icon);
             iconsBar.Remove(icon);
-            UpdatePositions();
+
+            try
+            {
+                UpdatePositions();
+            }
+            catch { } // Even if exception is thrown, next UpdatePosition calls will fix positions
         }
 
         private void UpdatePositions()

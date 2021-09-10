@@ -11,8 +11,12 @@
 
         public void Run() 
         {
-            if (random.Next(2) == 0) { }
-            else { }
+            if (random.Next(2) == 0) 
+            {
+            }
+            else
+            { 
+            }
         }
 
         public float GetDuration()

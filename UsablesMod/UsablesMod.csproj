@@ -78,6 +78,7 @@
     <Compile Include="UsablesMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Usables\BounceUsable.cs" />
+    <Compile Include="Usables\LoreUsable.cs" />
     <Compile Include="Usables\RandomCharmsUsable.cs" />
     <Compile Include="Usables\GeoMultiplierUsable.cs" />
     <Compile Include="Usables\IRevertable.cs" />

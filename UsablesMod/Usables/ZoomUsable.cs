@@ -6,10 +6,10 @@ namespace UsablesMod.Usables
     {
         private static readonly string[] POSSIBLE_NAMES_IN = { "Enhanced Vision", 
             "I didn't like 4K anyway", "Look at the details on your skin!", "Look me in the eyes", 
-            "20-20 Vision"};
+            "20-20 Vision", "Lurien's vision" };
         private static readonly string[] POSSIBLE_NAMES_OUT = { "Where's the Knight?", 
-            "I can't see anything", "What's over there?", "I can see my house from here!", 
-            "Smallow Knight Time!" };
+            "What's over there?", "I can see my house from here!", "Smallow Knight Time!",
+            "Where's Waldo?", "Dad reading something be like" };
 
         private readonly Random random;
         private readonly float multiplier;
