@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,19 +31,21 @@ namespace UsablesMod
             icon.GetComponent<RectTransform>().anchorMin = newPos;
             icon.GetComponent<RectTransform>().anchorMax = newPos;
             
-            float timer = 0;
+            Stopwatch timePassed = new Stopwatch();
+            timePassed.Start();
+
             Image iconImg = icon.GetComponentInChildren<Image>();
             iconImg.type = Image.Type.Filled;
             iconImg.fillMethod = Image.FillMethod.Radial360;
             iconImg.fillAmount = 0f;
             
-            while (iconsDurations.ContainsKey(icon) && timer < iconsDurations[icon]())
+            while (iconsDurations.ContainsKey(icon) && timePassed.Elapsed.TotalSeconds < iconsDurations[icon]())
             {
                 float duration = iconsDurations[icon]();
-                iconImg.fillAmount = Map(duration - timer, duration, 1f, 1f, 0.1f);
-                timer += 0.1f;
+                iconImg.fillAmount = Map(duration - (float)timePassed.Elapsed.TotalSeconds, duration, 1f, 1f, 0f);
                 yield return new WaitForSeconds(0.1f);
             }
+            timePassed.Stop();
         }
 
         private float Map(float s, float a1, float a2, float b1, float b2)
