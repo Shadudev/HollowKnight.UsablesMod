@@ -30,7 +30,10 @@ namespace UsablesMod.Usables
                 displayName = "Broken ";
             }
 
-            damageBuffAmount = random.Next(Math.Min(PlayerData.instance.nailDamage, 3), PlayerData.instance.nailDamage) * damageBuffMultiplier;
+            damageBuffAmount = random.Next(
+                Math.Min(PlayerData.instance.nailDamage, 3),
+                PlayerData.instance.nailDamage) * damageBuffMultiplier;
+
             if (damageBuffMultiplier < 0 && PlayerData.instance.nailDamage == 1) return;
 
             PlayerData.instance.nailDamage += damageBuffAmount;
@@ -83,6 +86,11 @@ namespace UsablesMod.Usables
         public string GetItemSpriteKey()
         {
             return "ShopIcons.Upslash";
+        }
+
+        internal int GetDamageBuff()
+        {
+            return damageBuffAmount;
         }
     }
 }

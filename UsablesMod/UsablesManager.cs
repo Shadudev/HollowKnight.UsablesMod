@@ -26,7 +26,7 @@ namespace UsablesMod
             usables = new Dictionary<string, IUsable>();
             factory = new UsablesFactory();
 
-            int amount = new System.Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(MIN_USABLES, MAX_USABLES + 1);
+            int amount = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(MIN_USABLES, MAX_USABLES + 1);
 
             for (int i = 0; i < amount; i++)
             {
@@ -91,6 +91,11 @@ namespace UsablesMod
                 items.Remove(swapPair.Key);
                 items.Add(swapPair.Value);
             }
+        }
+
+        internal void RevertActiveUsables()
+        {
+            usablesSlots.RevertActiveUsables();
         }
 
         private bool IsASmallGeoRock(string item)

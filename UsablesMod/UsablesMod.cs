@@ -52,6 +52,8 @@ namespace UsablesMod
             RandomizerMod.Randomization.ItemManager.AddItemsToRandomizedItemsSet -= UsablesManager.AddUsableItemsToSet;
             RandomizerMod.GiveItemActions.ExternItemHandlers.Remove(TriggerUsable);
             RandomizerMod.SaveSettings.PreAfterDeserialize -= UsablesManager.LoadMissingItems;
+
+            UsablesManager?.RevertActiveUsables(); 
             UsablesManager = null;
         }
     }

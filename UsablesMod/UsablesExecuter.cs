@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UsablesMod.Usables;
 
@@ -8,22 +9,30 @@ namespace UsablesMod
     class UsablesExecuter : MonoBehaviour
     {
         private readonly ActiveUsablesBar usablesBar;
+        private readonly Dictionary<IRevertable, Coroutine> activeRevertables;
 
         internal UsablesExecuter()
         {
             usablesBar = new ActiveUsablesBar();
+            activeRevertables = new Dictionary<IRevertable, Coroutine>();
         }
 
         public void RunUsable((IUsable Usable, GameObject icon) pair)
         {
-            GameManager.instance.StartCoroutine(RunUsableRoutine(pair));
+            lock (activeRevertables)
+            {
+                Coroutine coroutine = GameManager.instance.StartCoroutine(RunUsableRoutine(pair));
+                if (pair.Usable is IRevertable)
+                    activeRevertables.Add(pair.Usable as IRevertable, coroutine);
+            }
+
             ShowUsablePopup(pair.Usable);
         }
 
         private void ShowUsablePopup(IUsable usable)
         {
             string itemDefKey = "usablePopUp";
-            string displayName = usable.GetDisplayName();
+            string displayName = "Used " + usable.GetDisplayName();
             string spriteKey = usable.GetItemSpriteKey();
 
             RandomizerMod.Randomization.LogicManager.EditItemDef(itemDefKey, 
@@ -74,10 +83,64 @@ namespace UsablesMod
                 usablesBar.Remove(icon);
             }
 
-            LogHelper.Log($"Reverting {name}");
-            revertable.Revert();
+            lock (activeRevertables)
+            {
+                activeRevertables.Remove(revertable);
+                LogHelper.Log($"Reverting {name}");
+                revertable.Revert();
+                Destroy(icon);
+            }
+        }
 
-            Destroy(icon);
+        internal void RevertAll()
+        {
+            lock (activeRevertables)
+            {
+                foreach (KeyValuePair<IRevertable, Coroutine> kvp in activeRevertables)
+                {
+                    try
+                    {
+                        LogHelper.Log($"Reverting {(kvp.Key as IUsable).GetName()}");
+                        GameManager.instance.StopCoroutine(kvp.Value);
+                        kvp.Key.Revert();
+                    }
+                    catch (Exception e)
+                    {
+                        LogHelper.LogWarn($"Failed reverting {(kvp.Key as IUsable).GetName()}: {e.Message}");
+                        LogHelper.LogWarn($"{e.StackTrace}");
+                    }
+                }
+
+                activeRevertables.Clear();
+            }
+        }
+
+        private int CalculateVanillaNailDamageDifference()
+        {
+            lock (activeRevertables)
+            {
+                int difference = 0;
+                foreach (var kvp in activeRevertables)
+                {
+                    if (kvp.Key is NailModifierUsable)
+                    {
+                        NailModifierUsable nailModifier = kvp.Key as NailModifierUsable;
+                        difference += nailModifier.GetDamageBuff();
+                    }
+                }
+
+                return difference;
+            }
+        }
+
+        internal void OnSave(SaveGameData data)
+        {
+            data.playerData.nailDamage -= CalculateVanillaNailDamageDifference();
+        }
+
+        internal void AfterSave(int id)
+        {
+            PlayerData.instance.nailDamage += CalculateVanillaNailDamageDifference();
         }
     }
 }

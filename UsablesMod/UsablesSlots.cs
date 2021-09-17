@@ -79,7 +79,7 @@ namespace UsablesMod
             {
                 slotIndex = new System.Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed +
                     100 + NameFormatter.GetIdFromString(itemName)).Next(2);
-                Run(Pop(slotIndex == 0));
+                Run(Pop(wasUpperSlotUsed: slotIndex == 0));
             }
             else
             {
@@ -127,19 +127,19 @@ namespace UsablesMod
 
         private IEnumerator TriggerUsablesByInputs()
         {
-            while (!GameManager.instance.IsMenuScene())
+            while (true)
             {
                 if (InputHandler.Instance.inputActions.quickMap.IsPressed)
                 {
                     if (InputHandler.Instance.inputActions.up.IsPressed)
                     {
                         if (usables[0] != null)
-                            Run(Pop(true));
+                            Run(Pop(wasUpperSlotUsed: true));
                     }
                     else if (InputHandler.Instance.inputActions.down.IsPressed)
                     {
                         if (usables[1] != null)
-                            Run(Pop(false));
+                            Run(Pop(wasUpperSlotUsed: false));
                     }
                 }
 
@@ -170,11 +170,19 @@ namespace UsablesMod
             }
         }
 
+        internal void RevertActiveUsables()
+        {
+            usablesExecuter.RevertAll();
+        }
+
         internal void Hook()
         {
             UnHook();
 
-            ModHooks.Instance.AfterSavegameLoadHook += OnLoad; 
+            ModHooks.Instance.AfterSavegameLoadHook += OnLoad;
+            ModHooks.Instance.BeforeSavegameSaveHook += usablesExecuter.OnSave;
+            ModHooks.Instance.SavegameSaveHook += usablesExecuter.AfterSave;
+
             On.QuitToMenu.Start += OnQuitToMenu;
             On.InvAnimateUpAndDown.AnimateUp += OnInventoryOpen;
             On.InvAnimateUpAndDown.AnimateDown += OnInventoryClose;
@@ -185,6 +193,9 @@ namespace UsablesMod
         internal void UnHook()
         {
             ModHooks.Instance.AfterSavegameLoadHook -= OnLoad;
+            ModHooks.Instance.BeforeSavegameSaveHook -= usablesExecuter.OnSave;
+            ModHooks.Instance.SavegameSaveHook -= usablesExecuter.AfterSave;
+
             On.QuitToMenu.Start -= OnQuitToMenu;
             On.InvAnimateUpAndDown.AnimateUp -= OnInventoryOpen;
             On.InvAnimateUpAndDown.AnimateDown -= OnInventoryClose;
@@ -211,6 +222,7 @@ namespace UsablesMod
 
         private IEnumerator OnQuitToMenu(On.QuitToMenu.orig_Start orig, QuitToMenu self)
         {
+            RevertActiveUsables();
             Destroy();
             return orig(self);
         }
