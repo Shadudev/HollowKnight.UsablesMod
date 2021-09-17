@@ -57,6 +57,8 @@ namespace UsablesMod
                     return new BounceUsable(randomSeed);
                 case 9:
                     return new RandomCharmsUsable(randomSeed);
+                case 10:
+                    return new LoreUsable(randomSeed);
                 default:
                     return new SampleUsable(randomSeed);
             }

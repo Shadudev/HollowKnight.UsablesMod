@@ -4,7 +4,7 @@ namespace UsablesMod.Usables
 {
     class OvercharmedUsable : IUsable, IRevertable
     {
-        private static object s_lock = new object();
+        private static readonly object s_lock = new object();
         private static OvercharmedUsable s_activeInstance = null;
         private static float unifiedDuration = 0;
 
